@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta property="og:title" content="Aprovação de posts – Michel Mueller"><meta property="og:image" content="img/post_01.jpg">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Aprovação de posts · Michel Mueller</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Manrope:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: cabeçalho com progresso fixo + grade de posts no formato do feed (4:5), cada card com decisão própria */
+:root{
+  --bg:#0f0e0c; --panel:#1a1815; --line:#2e2a24; --fg:#f3eee6; --muted:#a39a8c;
+  --gold:#c9a25b; --ok:#5fb37a; --warn:#e0a03c; --okbg:rgba(95,179,122,.14); --warnbg:rgba(224,160,60,.14);
+  --display:"Archivo","Helvetica Neue",Arial,sans-serif; --body:"Manrope","Helvetica Neue",Arial,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 64px}
+header.top{padding-block:40px 20px;display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px}
+.who{display:flex;align-items:center;gap:16px;min-width:0}
+.who img{width:64px;height:64px;border-radius:50%;border:2px solid var(--gold);padding:2px;flex:none}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,4vw,38px);line-height:1.05;margin:4px 0 0;letter-spacing:-.01em;text-wrap:balance}
+.sub{color:var(--muted);margin:6px 0 0;max-width:60ch}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding-block:14px;display:flex;flex-wrap:wrap;gap:14px 24px;align-items:center}
+.stats{display:flex;gap:18px;flex-wrap:wrap;font-variant-numeric:tabular-nums;font-weight:600}
+.stats span b{font-family:var(--display);font-size:20px;margin-right:4px}
+.s-ok b{color:var(--ok)}.s-warn b{color:var(--warn)}.s-pend b{color:var(--fg)}
+.progress{flex:1 1 200px;height:8px;border-radius:99px;background:var(--line);overflow:hidden;display:flex;min-width:160px}
+.progress i{display:block;height:100%}
+.progress .p-ok{background:var(--ok)}.progress .p-warn{background:var(--warn)}
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.filters button{font:600 13px var(--body);color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:99px;padding:8px 14px;min-height:38px;cursor:pointer}
+.filters button[aria-pressed="true"]{color:var(--bg);background:var(--gold);border-color:var(--gold)}
+.note{margin:18px 0 0;padding:12px 14px;border:1px solid var(--line);border-radius:10px;color:var(--muted);font-size:14px}
+.note[data-kind="warn"]{border-color:var(--warn);color:var(--fg)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:22px;margin-top:22px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.card[data-status="aprovado"]{border-color:rgba(95,179,122,.55)}
+.card[data-status="ajuste"]{border-color:rgba(224,160,60,.6)}
+.thumb{display:block;padding:0;border:0;background:#000;cursor:zoom-in;width:100%}
+.thumb img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;max-width:100%}
+.meta{padding:14px 16px 16px;display:flex;flex-direction:column;gap:12px;flex:1}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.num{font-family:var(--display);font-weight:700;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.num small{font-family:var(--body);font-weight:600;color:var(--muted);font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin-left:8px}
+.pill{font-size:12px;font-weight:700;padding:4px 10px;border-radius:99px;white-space:nowrap;border:1px solid var(--line);color:var(--muted)}
+.pill.aprovado{color:var(--ok);background:var(--okbg);border-color:transparent}
+.pill.ajuste{color:var(--warn);background:var(--warnbg);border-color:transparent}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:auto}
+.actions button,.save{font:700 14px var(--body);border-radius:10px;min-height:44px;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--fg)}
+.btn-ok:hover,.btn-ok[aria-pressed="true"]{background:var(--ok);border-color:var(--ok);color:#0b120d}
+.btn-adj:hover,.btn-adj[aria-pressed="true"]{background:var(--warn);border-color:var(--warn);color:#1a1205}
+.cmt{display:flex;flex-direction:column;gap:8px}
+.cmt label{font-size:13px;font-weight:600;color:var(--muted)}
+.cmt textarea{font:15px var(--body);color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px;min-height:84px;resize:vertical;width:100%}
+.save{background:var(--warn);border-color:var(--warn);color:#1a1205}
+.said{font-size:14px;background:var(--warnbg);border-radius:10px;padding:10px 12px;overflow-wrap:anywhere}
+.said b{display:block;font-size:12px;color:var(--warn);letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.when{font-size:12px;color:var(--muted)}
+button:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.send-box{margin-top:40px;padding:24px;border:1px solid var(--gold);border-radius:14px;display:flex;flex-wrap:wrap;gap:16px 24px;align-items:center;justify-content:space-between}
+.send-box h2{font-family:var(--display);font-size:22px;margin:0}
+.send{font:700 15px var(--body);background:var(--gold);color:#140f06;text-decoration:none;border-radius:10px;padding:14px 20px;min-height:48px;display:inline-flex;align-items:center}
+.empty{color:var(--muted);padding:40px 0;text-align:center;grid-column:1/-1}
+/* lightbox */
+.lb{position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;padding:calc(16px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+[hidden]{display:none!important}
+.lb img{max-height:calc(100% - 70px);max-width:100%;width:auto;border-radius:6px}
+.lb .lbbar{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.lb a,.lb button{font:700 14px var(--body);color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 16px;min-height:44px;text-decoration:none;cursor:pointer;display:inline-flex;align-items:center}
+@media (max-width:560px){.grid{grid-template-columns:1fr 1fr;gap:12px}.meta{padding:10px}.actions{grid-template-columns:1fr}.num small{display:none}}
+@media (prefers-reduced-motion:no-preference){.card{transition:border-color .2s}}
+</style>
+</head><body>
+<div class="wrap">
+  <header class="top">
+    <div class="who">
+      <img src="img/avatar.png" alt="">
+      <div>
+        <div class="eyebrow">Aprovação de conteúdo</div>
+        <h1>30 posts para o feed do @omichelmueller</h1>
+        <p class="sub">Toque em <b>Aprovar</b> ou em <b>Pedir ajuste</b> em cada post. Para ver em tamanho grande, toque na imagem. No final, envie as respostas pelo WhatsApp.</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="bar" role="region" aria-label="Progresso">
+    <div class="stats" aria-live="polite">
+      <span class="s-ok"><b id="nOk">0</b>aprovados</span>
+      <span class="s-warn"><b id="nAdj">0</b>com ajuste</span>
+      <span class="s-pend"><b id="nPend">30</b>pendentes</span>
+    </div>
+    <div class="progress" aria-hidden="true"><i class="p-ok" id="pOk"></i><i class="p-warn" id="pAdj"></i></div>
+    <div class="filters" role="group" aria-label="Filtrar posts">
+      <button type="button" data-f="todos" aria-pressed="true">Todos</button>
+      <button type="button" data-f="pendente" aria-pressed="false">Pendentes</button>
+      <button type="button" data-f="aprovado" aria-pressed="false">Aprovados</button>
+      <button type="button" data-f="ajuste" aria-pressed="false">Ajustes</button>
+    </div>
+  </div>
+
+  <p class="note" id="note" hidden></p>
+  <div class="grid" id="grid"></div>
+  <section class="send-box">
+    <div><h2>Terminou de revisar?</h2><p class="sub">Envie suas respostas pelo WhatsApp. A mensagem já vai pronta com os aprovados e os ajustes.</p></div>
+    <a id="send" class="send" href="#" target="_blank" rel="noopener">Enviar respostas no WhatsApp</a>
+  </section>
+</div>
+
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Post em tamanho grande">
+  <img id="lbImg" alt="">
+  <div class="lbbar">
+    <button type="button" id="lbPrev">Anterior</button>
+    <a id="lbHd" href="#" target="_blank" rel="noopener">Abrir em alta</a>
+    <button type="button" id="lbNext">Próximo</button>
+    <button type="button" id="lbClose">Fechar</button>
+  </div>
+</div>
+
+<script>
+const POSTS = [{"tag": "Mentalidade", "t": "Barbeiro bom corta cabelo. Barbeiro empresário constrói patrimônio."}, {"tag": "Gestão", "t": "Agenda cheia não significa que sua barbearia dá lucro."}, {"tag": "Gestão", "t": "Se a barbearia só funciona quando você está na cadeira, você não tem um negócio. Tem um emprego."}, {"tag": "Preço", "t": "Promoção de corte a R$ 20 não atrai cliente. Atrai quem vai embora quando aparecer um de R$ 15."}, {"tag": "Experiência", "t": "O cliente não paga pelo corte. Paga pelo que sente quando levanta da cadeira."}, {"tag": "Preço", "t": "Preço é posicionamento. Quem cobra pouco comunica que vale pouco."}, {"tag": "Equipe", "t": "Equipe boa não se encontra. Se forma."}, {"tag": "Gestão", "t": "Quem não sabe o próprio custo por atendimento está trabalhando no escuro."}, {"tag": "Mentalidade", "t": "Talento te coloca na cadeira. Gestão te tira dela."}, {"tag": "Processos", "t": "Barbearia cheia sem processo é só bagunça movimentada."}, {"tag": "Fidelização", "t": "Ninguém fideliza cliente com desconto. Fideliza com padrão."}, {"tag": "Marketing", "t": "Seu Instagram é a vitrine que trabalha enquanto você dorme."}, {"tag": "Mentalidade", "t": "O maior concorrente da sua barbearia é a sua falta de constância."}, {"tag": "Crescimento", "t": "Crescer dói. Ficar parado custa mais caro."}, {"tag": "Fidelização", "t": "Você não precisa de mais clientes. Precisa de clientes que voltam."}, {"tag": "Gestão", "t": "Ticket médio baixo é o problema silencioso de muita barbearia."}, {"tag": "Gestão", "t": "Quem não mede, não gerencia. Quem não gerencia, não cresce."}, {"tag": "Liderança", "t": "O dono que faz tudo sozinho vira o gargalo do próprio negócio."}, {"tag": "Equipe", "t": "Seu barbeiro precisa de meta, não só de comissão."}, {"tag": "Experiência", "t": "O ambiente vende antes da tesoura encostar no cabelo."}, {"tag": "Mentoria", "t": "Mentoria não é atalho. É não repetir erros que alguém já pagou caro para cometer."}, {"tag": "Equipe Hunker", "t": "Uma barbearia não cresce com um barbeiro bom. Cresce com um time que veste a camisa."}, {"tag": "Disciplina", "t": "Disciplina é fazer o básico bem feito todos os dias, principalmente quando ninguém está olhando."}, {"tag": "Processos", "t": "Agenda, caixa e equipe. Se um falha, o resto desmorona."}, {"tag": "Posicionamento", "t": "Não é sobre ter a barbearia mais bonita da cidade. É sobre ter a mais bem administrada."}, {"tag": "Preço", "t": "Reajustar preço dá medo. Trabalhar no prejuízo deveria dar mais."}, {"tag": "Mentalidade", "t": "Sua barbearia é do tamanho da sua mentalidade."}, {"tag": "Fidelização", "t": "Cliente satisfeito volta. Cliente encantado traz outros."}, {"tag": "Conhecimento", "t": "Aprender não é custo. É o investimento com maior retorno do seu negócio."}, {"tag": "Visão", "t": "A cadeira foi o começo. O negócio é o destino."}];
+const pad = n => String(n).padStart(2,'0');
+const state = {}; // id -> {status, comentario, at}
+const editing = new Set();
+let filter = 'todos';
+
+const grid = document.getElementById('grid');
+const note = document.getElementById('note');
+
+function statusOf(id){ return state[id]?.status || 'pendente'; }
+function fmt(at){ try{ return new Date(at).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});}catch(e){return ''} }
+
+function render(){
+  // preserva rascunhos digitados
+  const act=document.activeElement, actId=act&&act.tagName==='TEXTAREA'?act.id:null, selS=act?.selectionStart;
+  const drafts = {};
+  grid.querySelectorAll('textarea').forEach(t => drafts[t.id] = t.value);
+  let ok=0, adj=0;
+  POSTS.forEach((p,i)=>{ const s=statusOf('post_'+pad(i+1)); if(s==='aprovado')ok++; else if(s==='ajuste')adj++; });
+  document.getElementById('nOk').textContent=ok;
+  document.getElementById('nAdj').textContent=adj;
+  document.getElementById('nPend').textContent=POSTS.length-ok-adj;
+  document.getElementById('pOk').style.width=(ok/POSTS.length*100)+'%';
+  document.getElementById('pAdj').style.width=(adj/POSTS.length*100)+'%';
+
+  updateSend();
+  grid.innerHTML='';
+  let shown=0;
+  POSTS.forEach((p,i)=>{
+    const id='post_'+pad(i+1), s=statusOf(id), d=state[id]||{};
+    if(filter!=='todos' && s!==filter) return;
+    shown++;
+    const card=document.createElement('article');
+    card.className='card'; card.dataset.status=s;
+    const pillTxt={pendente:'Pendente',aprovado:'Aprovado',ajuste:'Ajuste pedido'}[s];
+    const isEditing = editing.has(id);
+    card.innerHTML=`
+      <button class="thumb" type="button" data-open="${i}" aria-label="Ver post ${pad(i+1)} em tamanho grande"><img loading="lazy" src="img/${id}.jpg" alt=""></button>
+      <div class="meta">
+        <div class="row"><span class="num">Post ${pad(i+1)}<small></small></span><span class="pill ${s}">${pillTxt}</span></div>
+        ${s==='ajuste' && d.comentario && !isEditing ? `<div class="said"><b>Ajuste pedido</b><span></span></div>`:''}
+        ${d.at && s!=='pendente' ? `<div class="when">Atualizado em ${fmt(d.at)}</div>`:''}
+        ${isEditing ? `<div class="cmt"><label for="c_${id}">O que você quer mudar?</label><textarea id="c_${id}" placeholder="Ex.: trocar a foto, mudar uma palavra da frase..."></textarea><button class="save" type="button" data-save="${id}">Enviar ajuste</button></div>`:''}
+        <div class="actions">
+          <button class="btn-ok" type="button" data-ok="${id}" aria-pressed="${s==='aprovado'}">${s==='aprovado'?'Aprovado':'Aprovar'}</button>
+          <button class="btn-adj" type="button" data-adj="${id}" aria-pressed="${s==='ajuste'||isEditing}">${s==='ajuste'?'Editar ajuste':'Pedir ajuste'}</button>
+        </div>
+      </div>`;
+    card.querySelector('.num small').textContent=p.tag;
+    card.querySelector('.thumb img').alt=p.t;
+    const said=card.querySelector('.said span'); if(said) said.textContent=d.comentario;
+    const ta=card.querySelector('textarea');
+    if(ta){ ta.value = drafts['c_'+id] ?? (d.comentario||''); }
+    grid.appendChild(card);
+  });
+  if(actId){ const t=document.getElementById(actId); if(t){ t.focus(); try{t.setSelectionRange(selS,selS)}catch(e){} } }
+  if(!shown){ const e=document.createElement('p'); e.className='empty'; e.textContent='Nenhum post neste filtro.'; grid.appendChild(e); }
+}
+
+const KEY='aprovacao-michel-v1';
+function load(){ try{ Object.assign(state, JSON.parse(localStorage.getItem(KEY)||'{}')); }catch(e){} }
+function persist(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+function save(id, body){
+  if(body.status==='pendente') delete state[id]; else state[id] = {...body};
+  persist(); render();
+}
+const WHATS='5547988564125';
+function resumo(){
+  const ok=[], adj=[], pend=[];
+  POSTS.forEach((p,i)=>{ const id='post_'+pad(i+1), s=statusOf(id);
+    if(s==='aprovado') ok.push(pad(i+1)); else if(s==='ajuste') adj.push('• Post '+pad(i+1)+': '+state[id].comentario); else pend.push(pad(i+1)); });
+  let t='*Aprovação dos posts – @omichelmueller*\n\n';
+  t+='✅ Aprovados ('+ok.length+'): '+(ok.join(', ')||'nenhum')+'\n\n';
+  t+='✏️ Ajustes ('+adj.length+'):\n'+(adj.join('\n')||'nenhum')+'\n\n';
+  if(pend.length) t+='⏳ Ainda pendentes ('+pend.length+'): '+pend.join(', ');
+  return t;
+}
+function updateSend(){ const a=document.getElementById('send'); if(a) a.href='https://wa.me/'+WHATS+'?text='+encodeURIComponent(resumo()); }
+
+function showNote(t, kind){ note.textContent=t; note.dataset.kind=kind||''; note.hidden=false; }
+
+grid.addEventListener('click', e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  if(b.dataset.open!==undefined) return openLb(+b.dataset.open);
+  if(b.dataset.ok){ const id=b.dataset.ok; editing.delete(id);
+    if(statusOf(id)==='aprovado') return save(id,{status:'pendente',comentario:'',at:new Date().toISOString()});
+    return save(id,{status:'aprovado',comentario:'',at:new Date().toISOString()}); }
+  if(b.dataset.adj){ const id=b.dataset.adj;
+    if(editing.has(id)) editing.delete(id); else editing.add(id);
+    render(); const t=document.getElementById('c_'+id); if(t) t.focus(); return; }
+  if(b.dataset.save){ const id=b.dataset.save; const t=document.getElementById('c_'+id); const v=(t?.value||'').trim();
+    if(!v){ t.focus(); t.placeholder='Escreva o ajuste antes de enviar.'; return; }
+    editing.delete(id); return save(id,{status:'ajuste',comentario:v.slice(0,2000),at:new Date().toISOString()}); }
+});
+
+document.querySelector('.filters').addEventListener('click', e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  filter=b.dataset.f;
+  document.querySelectorAll('.filters button').forEach(x=>x.setAttribute('aria-pressed', String(x===b)));
+  render();
+});
+
+// lightbox
+const lb=document.getElementById('lb'), lbImg=document.getElementById('lbImg'), lbHd=document.getElementById('lbHd');
+let cur=0, lastFocus=null;
+function openLb(i){ cur=(i+POSTS.length)%POSTS.length; const id='post_'+pad(cur+1);
+  lbImg.src='img/'+id+'.jpg'; lbImg.alt=POSTS[cur].t; lbHd.href='hd/'+id+'.jpg';
+  if(lb.hidden){ lastFocus=document.activeElement; lb.hidden=false; document.getElementById('lbClose').focus(); } }
+function closeLb(){ lb.hidden=true; lastFocus?.focus(); }
+document.getElementById('lbPrev').onclick=()=>openLb(cur-1);
+document.getElementById('lbNext').onclick=()=>openLb(cur+1);
+document.getElementById('lbClose').onclick=closeLb;
+lb.addEventListener('click',e=>{ if(e.target===lb) closeLb(); });
+lb.addEventListener('keydown',e=>{ if(e.key==='Escape')closeLb(); if(e.key==='ArrowRight')openLb(cur+1); if(e.key==='ArrowLeft')openLb(cur-1); });
+
+load(); render();
+</script>
+
+</body></html>
