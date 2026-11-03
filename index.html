@@ -56,7 +56,17 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,4vw,38px);lin
 .wa:hover{filter:brightness(1.08)}
 .wa.ghost{background:transparent;color:#25d366}
 .wa svg{width:18px;height:18px;flex:none}
-.actions .wa{grid-column:1/-1}
+.actions{grid-template-columns:1fr 1fr 1fr}
+.btn-rej:hover,.btn-rej[aria-pressed="true"]{background:#d9534f;border-color:#d9534f;color:#fff}
+.pill.reprovado{color:#ef7d7a;background:rgba(217,83,79,.15);border-color:transparent}
+.card[data-status="reprovado"]{border-color:rgba(217,83,79,.6)}
+.s-rej b{color:#ef7d7a}.progress .p-rej{background:#d9534f}
+.sent{font-size:12px;font-weight:700;color:#25d366}
+.sendbar{position:fixed;left:0;right:0;bottom:0;z-index:15;background:rgba(15,14,12,.96);border-top:1px solid var(--line);padding:12px max(16px,env(safe-area-inset-left,0px)) calc(12px + env(safe-area-inset-bottom,0px));backdrop-filter:blur(6px)}
+.sendin{max-width:1180px;margin:0 auto;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.seltxt{font-weight:600}.seltxt b{font-family:var(--display);font-size:22px;color:#25d366;margin-right:2px}
+.sendbar .wa{flex:0 1 auto}
+body.has-sel{padding-bottom:96px}
 .lote{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 0;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--panel);align-items:center}
 .lote p{margin:0;flex:1 1 220px;color:var(--muted);font-size:14px}
 .lote p b{color:var(--fg)}
@@ -80,7 +90,7 @@ button:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid va
 .lb img{max-height:calc(100% - 70px);max-width:100%;width:auto;border-radius:6px}
 .lb .lbbar{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
 .lb a,.lb button{font:700 14px var(--body);color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 16px;min-height:44px;text-decoration:none;cursor:pointer;display:inline-flex;align-items:center}
-@media (max-width:560px){.grid{grid-template-columns:1fr;gap:16px}.lote .wa,.lote .all{flex:1 1 100%}}
+@media (max-width:560px){.grid{grid-template-columns:1fr;gap:16px}.lote .all{flex:1 1 100%}.sendbar .wa{flex:1 1 100%}.actions button{font-size:13px}}
 @media (prefers-reduced-motion:no-preference){.card{transition:border-color .2s}}
 .leg{border:1px solid var(--line);border-radius:10px;background:var(--bg)}
 .legh{font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:12px 12px 6px;color:var(--gold)}
@@ -97,7 +107,7 @@ button:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid va
       <div>
         <div class="eyebrow">Aprovação de conteúdo</div>
         <h1>@omichelmueller</h1>
-        <p class="sub">Toque em <b>Aprovar</b> ou em <b>Pedir ajuste</b> em cada post. Para ver em tamanho grande, toque na imagem. A legenda de cada post fica logo abaixo da imagem, para aprovar junto. As respostas ficam salvas neste aparelho.</p>
+        <p class="sub">Marque cada post como <b>Aprovar</b>, <b>Pedir ajuste</b> ou <b>Reprovar</b>. Os marcados vão somando na barra verde e você envia todos juntos pelo WhatsApp. Para ver em tamanho grande, toque na imagem. A legenda de cada post fica logo abaixo da imagem, para aprovar junto. As respostas ficam salvas neste aparelho.</p>
       </div>
     </div>
   </header>
@@ -106,25 +116,28 @@ button:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid va
     <div class="stats" aria-live="polite">
       <span class="s-ok"><b id="nOk">0</b>aprovados</span>
       <span class="s-warn"><b id="nAdj">0</b>com ajuste</span>
+      <span class="s-rej"><b id="nRej">0</b>reprovados</span>
       <span class="s-pend"><b id="nPend">24</b>pendentes</span>
     </div>
-    <div class="progress" aria-hidden="true"><i class="p-ok" id="pOk"></i><i class="p-warn" id="pAdj"></i></div>
+    <div class="progress" aria-hidden="true"><i class="p-ok" id="pOk"></i><i class="p-warn" id="pAdj"></i><i class="p-rej" id="pRej"></i></div>
     <div class="filters" role="group" aria-label="Filtrar posts">
       <button type="button" data-f="todos" aria-pressed="true">Todos</button>
       <button type="button" data-f="pendente" aria-pressed="false">Pendentes</button>
       <button type="button" data-f="aprovado" aria-pressed="false">Aprovados</button>
       <button type="button" data-f="ajuste" aria-pressed="false">Ajustes</button>
+      <button type="button" data-f="reprovado" aria-pressed="false">Reprovados</button>
     </div>
   </div>
 
   <div class="lote" role="region" aria-label="Aprovar em lote">
-    <p><b>Aprovou tudo de uma vez?</b> Use o botão de aprovar todos e depois envie o resumo pelo WhatsApp. Também dá para enviar cada post separado, pelo botão verde de cada card.</p>
+    <p><b>Gostou de tudo?</b> Aprove todos os pendentes de uma vez. Eles entram na seleção junto com os posts que você já marcou.</p>
     <button class="all" type="button" id="allOk">Aprovar todos os pendentes</button>
-    <button class="wa" type="button" id="waAll"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.4 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.3.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg> Enviar resumo no WhatsApp</button>
   </div>
   <p class="note" id="note" hidden></p>
   <div class="grid" id="grid"></div>
 </div>
+
+<div class="sendbar" id="sendbar" hidden role="region" aria-label="Enviar selecionados"><div class="sendin"><span class="seltxt"><b id="nSel">0</b> <span id="selWord">selecionados</span> para enviar</span><button class="wa" type="button" id="waSel"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.4 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.3.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg> Enviar no WhatsApp</button></div></div>
 
 <footer class="foot">Gestão de redes sociais · <b>Jeferson Salazar</b></footer>
 
@@ -174,27 +187,32 @@ function buildCard(p,i){
 function fillCard(card,p,i,drafts){
   const id='post_'+pad(i+1), s=statusOf(id), d=state[id]||{}, isEditing=editing.has(id);
   card.dataset.status=s;
-  const pillTxt={pendente:'Pendente',aprovado:'Aprovado',ajuste:'Ajuste pedido'}[s];
+  const pillTxt={pendente:'Pendente',aprovado:'Aprovado',ajuste:'Ajuste pedido',reprovado:'Reprovado'}[s];
   const dyn=card.querySelector('.dyn');
   dyn.innerHTML=`<div class="row"><span class="num">Post ${pad(i+1)}<small></small></span><span class="pill ${s}">${pillTxt}</span></div>
     ${s==='ajuste' && d.comentario && !isEditing ? `<div class="said"><b>Ajuste pedido</b><span></span></div>`:''}
-    ${d.at && s!=='pendente' ? `<div class="when">Atualizado em ${fmt(d.at)}</div>`:''}
-    ${isEditing ? `<div class="cmt"><label for="c_${id}">O que você quer mudar?</label><textarea id="c_${id}" placeholder="Ex.: trocar a foto, mudar uma palavra da frase..."></textarea><button class="save" type="button" data-save="${id}">${WA_SVG} Enviar ajuste pelo WhatsApp</button></div>`:''}`;
+    ${d.at && s!=='pendente' ? `<div class="when">Atualizado em ${fmt(d.at)} ${d.sent?'<span class="sent">· enviado no WhatsApp</span>':''}</div>`:''}
+    ${isEditing ? `<div class="cmt"><label for="c_${id}">O que você quer mudar?</label><textarea id="c_${id}" placeholder="Ex.: trocar a foto, mudar uma palavra da frase..."></textarea><button class="save" type="button" data-save="${id}">Salvar ajuste</button></div>`:''}`;
   dyn.querySelector('.num small').textContent=p.tag;
   const said=dyn.querySelector('.said span'); if(said) said.textContent=d.comentario;
   const ta=dyn.querySelector('textarea'); if(ta) ta.value = drafts['c_'+id] ?? (d.comentario||'');
   card.querySelector('.actions').innerHTML=`<button class="btn-ok" type="button" data-ok="${id}" aria-pressed="${s==='aprovado'}">${s==='aprovado'?'Aprovado':'Aprovar'}</button>
     <button class="btn-adj" type="button" data-adj="${id}" aria-pressed="${s==='ajuste'||isEditing}">${s==='ajuste'?'Editar ajuste':'Pedir ajuste'}</button>
-    ${s!=='pendente' ? `<button class="wa${s==='ajuste'?'':' ghost'}" type="button" data-wa="${i}">${WA_SVG} Enviar este post no WhatsApp</button>`:''}`;
+    <button class="btn-rej" type="button" data-rej="${id}" aria-pressed="${s==='reprovado'}">${s==='reprovado'?'Reprovado':'Reprovar'}</button>`;
 }
 function render(){
   const act=document.activeElement, actId=act&&act.tagName==='TEXTAREA'?act.id:null, selS=act?.selectionStart;
   const drafts={}; grid.querySelectorAll('textarea').forEach(t=>drafts[t.id]=t.value);
-  let ok=0, adj=0;
-  KEEP.forEach(n=>{ const s=statusOf('post_'+pad(n)); if(s==='aprovado')ok++; else if(s==='ajuste')adj++; });
+  let ok=0, adj=0, rej=0;
+  KEEP.forEach(n=>{ const s=statusOf('post_'+pad(n)); if(s==='aprovado')ok++; else if(s==='ajuste')adj++; else if(s==='reprovado')rej++; });
+  document.getElementById('nRej').textContent=rej;
+  document.getElementById('pRej').style.width=(rej/KEEP.length*100)+'%';
+  const sel=selecionados(); document.getElementById('nSel').textContent=sel.length;
+  document.getElementById('selWord').textContent=sel.length===1?'selecionado':'selecionados';
+  document.getElementById('sendbar').hidden=!sel.length; document.body.classList.toggle('has-sel',sel.length>0);
   document.getElementById('nOk').textContent=ok;
   document.getElementById('nAdj').textContent=adj;
-  document.getElementById('nPend').textContent=KEEP.length-ok-adj;
+  document.getElementById('nPend').textContent=KEEP.length-ok-adj-rej;
   document.getElementById('pOk').style.width=(ok/KEEP.length*100)+'%';
   document.getElementById('pAdj').style.width=(adj/KEEP.length*100)+'%';
   let shown=0;
@@ -213,44 +231,41 @@ function render(){
 
 async function save(id, body){
   state[id] = {...body};
-  render();
-  try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){}
+  persist(); render();
 }
 
 const WA_NUM='5547988564125';
 function openWa(msg){ const u='https://wa.me/'+WA_NUM+'?text='+encodeURIComponent(msg); const w=window.open(u,'_blank'); if(!w) location.href=u; }
-function linhaPost(i){ const id='post_'+pad(i+1), d=state[id]||{}, s=statusOf(id);
-  if(s==='aprovado') return 'Post '+pad(i+1)+' ('+POSTS[i].tag+'): aprovado ✅';
-  if(s==='ajuste') return 'Post '+pad(i+1)+' ('+POSTS[i].tag+'): pedir ajuste ✏️\n'+(d.comentario||'');
-  return 'Post '+pad(i+1)+': pendente'; }
-function resumo(){ const ok=[],adj=[],pend=[];
-  KEEP.forEach(n=>{ const s=statusOf('post_'+pad(n)); (s==='aprovado'?ok:s==='ajuste'?adj:pend).push(n-1); });
-  let m='Oi! Aqui é o retorno dos posts do @omichelmueller:\n\n';
-  if(ok.length===KEEP.length) m+='✅ Todos os '+KEEP.length+' posts aprovados!\n';
-  else { if(ok.length) m+='✅ Aprovados ('+ok.length+'): '+ok.map(i=>pad(i+1)).join(', ')+'\n';
-    if(adj.length){ m+='\n✏️ Com ajuste ('+adj.length+'):\n'; adj.forEach(i=>{ m+='• Post '+pad(i+1)+': '+((state['post_'+pad(i+1)]||{}).comentario||'')+'\n'; }); }
-    if(pend.length) m+='\n⏳ Ainda sem resposta: '+pend.map(i=>pad(i+1)).join(', ')+'\n'; }
+function selecionados(){ return KEEP.filter(n=>{ const d=state['post_'+pad(n)]; return d && d.status && d.status!=='pendente' && !d.sent; }); }
+function persist(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+function mensagem(list){ const ok=[],adj=[],rej=[];
+  list.forEach(n=>{ const s=statusOf('post_'+pad(n)); (s==='aprovado'?ok:s==='ajuste'?adj:rej).push(n); });
+  let m='Oi! Retorno dos posts do @omichelmueller ('+list.length+(list.length===1?' post':' posts')+'):\n';
+  if(ok.length) m+='\n✅ Aprovados ('+ok.length+'): '+ok.map(pad).join(', ')+'\n';
+  if(adj.length){ m+='\n✏️ Ajustes ('+adj.length+'):\n'; adj.forEach(n=>{ m+='• Post '+pad(n)+': '+((state['post_'+pad(n)]||{}).comentario||'')+'\n'; }); }
+  if(rej.length) m+='\n❌ Reprovados ('+rej.length+'): '+rej.map(pad).join(', ')+'\n';
   return m; }
-document.getElementById('waAll').onclick=()=>openWa(resumo());
-document.getElementById('allOk').onclick=()=>{ const at=new Date().toISOString(); KEEP.forEach(n=>{ const id='post_'+pad(n); if(statusOf(id)==='pendente') state[id]={status:'aprovado',comentario:'',at}; }); editing.clear(); try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} render(); };
+document.getElementById('waSel').onclick=()=>{ const list=selecionados(); if(!list.length) return; openWa(mensagem(list)); list.forEach(n=>{ state['post_'+pad(n)].sent=true; }); persist(); render(); };
+document.getElementById('allOk').onclick=()=>{ const at=new Date().toISOString(); KEEP.forEach(n=>{ const id='post_'+pad(n); if(statusOf(id)==='pendente') state[id]={status:'aprovado',comentario:'',at,sent:false}; }); editing.clear(); persist(); render(); };
 function showNote(t, kind){ note.textContent=t; note.dataset.kind=kind||''; note.hidden=false; }
 
 grid.addEventListener('click', e=>{
   const b=e.target.closest('button'); if(!b) return;
   if(b.dataset.open!==undefined) return openLb(+b.dataset.open);
-  if(b.dataset.wa!==undefined){ const i=+b.dataset.wa; openWa('Oi! Retorno do post do @omichelmueller:\n\n'+linhaPost(i)); return; }
+  if(b.dataset.rej){ const id=b.dataset.rej; editing.delete(id);
+    if(statusOf(id)==='reprovado') return save(id,{status:'pendente',comentario:'',at:new Date().toISOString()});
+    return save(id,{status:'reprovado',comentario:'',at:new Date().toISOString(),sent:false}); }
   if(b.dataset.copy!==undefined){ const t=LEG[+b.dataset.copy]||''; (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{b.textContent='Copiada';setTimeout(()=>b.textContent='Copiar legenda',1600)}).catch(()=>{b.textContent='Selecione o texto acima'}); return; }
   if(b.dataset.ok){ const id=b.dataset.ok; editing.delete(id);
     if(statusOf(id)==='aprovado') return save(id,{status:'pendente',comentario:'',at:new Date().toISOString()});
-    return save(id,{status:'aprovado',comentario:'',at:new Date().toISOString()}); }
+    return save(id,{status:'aprovado',comentario:'',at:new Date().toISOString(),sent:false}); }
   if(b.dataset.adj){ const id=b.dataset.adj;
     if(editing.has(id)) editing.delete(id); else editing.add(id);
     render(); const t=document.getElementById('c_'+id); if(t) t.focus(); return; }
   if(b.dataset.save){ const id=b.dataset.save; const t=document.getElementById('c_'+id); const v=(t?.value||'').trim();
     if(!v){ t.focus(); t.placeholder='Escreva o ajuste antes de enviar.'; return; }
-    editing.delete(id); const i=parseInt(id.slice(5),10)-1;
-    openWa('Oi! Ajuste no post do @omichelmueller:\n\nPost '+pad(i+1)+' ('+POSTS[i].tag+'): pedir ajuste ✏️\n'+v);
-    return save(id,{status:'ajuste',comentario:v.slice(0,2000),at:new Date().toISOString()}); }
+    editing.delete(id);
+    return save(id,{status:'ajuste',comentario:v.slice(0,2000),at:new Date().toISOString(),sent:false}); }
 });
 
 document.querySelector('.filters').addEventListener('click', e=>{
