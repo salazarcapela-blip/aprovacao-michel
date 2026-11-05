@@ -128,6 +128,12 @@ button:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid va
 .foot{max-width:1180px;margin:0 auto;padding:28px 16px calc(32px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);text-align:center;color:var(--muted);font-size:14px}
 .foot b{color:var(--fg)}
 .leg p{margin:0;padding:0 12px 10px;font-size:14px;white-space:pre-line;overflow-wrap:anywhere;color:var(--fg)}
+.reels{margin-top:22px}
+.sech{font:800 20px var(--display);margin:26px 0 0;display:flex;align-items:center;gap:10px}
+.sech small{font:700 12px var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.reelgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,340px));gap:22px;margin-top:14px}
+@media (max-width:560px){.reelgrid{grid-template-columns:1fr}}
+.reelvid{display:block;width:100%;aspect-ratio:9/16;background:#000;object-fit:cover}
 .leg .copy{margin:0 12px 12px;font:700 13px var(--body);border-radius:10px;min-height:40px;padding:0 14px;cursor:pointer;border:1px solid var(--gold);background:transparent;color:var(--gold)}
 </style>
 
@@ -138,7 +144,7 @@ button:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid va
       <div>
         <div class="eyebrow">Aprovação de conteúdo</div>
         <h1>@omichelmueller</h1>
-        <p class="sub">Marque cada post como <b>Aprovar</b>, <b>Pedir ajuste</b> ou <b>Reprovar</b>. Os marcados vão somando na barra verde e você envia todos juntos pelo WhatsApp. Para ver em tamanho grande, toque na imagem. A legenda de cada post fica logo abaixo da imagem, para aprovar junto. As respostas ficam salvas neste aparelho.</p>
+        <p class="sub">Marque cada post e cada reel como <b>Aprovar</b>, <b>Pedir ajuste</b> ou <b>Reprovar</b>. Os marcados vão somando na barra verde e você envia todos juntos pelo WhatsApp. Para ver em tamanho grande, toque na imagem. A legenda de cada post fica logo abaixo da imagem, para aprovar junto. As respostas ficam salvas neste aparelho.</p>
       </div>
     </div>
   </header>
@@ -166,6 +172,9 @@ button:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid va
     <button class="wa" type="button" id="waSel2" disabled><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.4 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.3.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg> <span id="sel2Txt">Enviar selecionados (0)</span></button>
   </div>
   <p class="note" id="note" hidden></p>
+  <h2 class="sech" id="reelsH">Reels <small>vídeos</small></h2>
+  <div class="reelgrid" id="reels"></div>
+  <h2 class="sech">Feed <small>posts</small></h2>
   <div class="grid" id="grid"></div>
 </div>
 
@@ -188,6 +197,8 @@ const POSTS = [{"tag": "Mentalidade", "t": "Barbeiro bom corta cabelo. Barbeiro 
 const LEG = ["Cortar bem é o mínimo. Foi o que me colocou na cadeira, mas não foi o que construiu a Hunker.\n\nO barbeiro que só corta troca hora por dinheiro. O barbeiro empresário cria um negócio que gera valor mesmo quando ele não está atendendo: equipe, processo, marca e números na mão.\n\nTalento abre a porta. Gestão é o que faz você crescer.\n\nVocê hoje é mais barbeiro ou mais empresário? Conta aqui nos comentários.\n\n#barbeiroempresario #barbearia #gestaodebarbearia #empreendedorismo #hunker", "Agenda lotada dá uma sensação boa. Mas sensação não paga boleto.\n\nJá vi barbearia com fila na porta e caixa no vermelho no fim do mês. Preço errado, custo que ninguém calcula, comissão que não fecha a conta.\n\nAntes de comemorar a agenda cheia, olha o que sobra no final.\n\nSalva este post para lembrar na hora de fechar o mês.\n\n#gestaodebarbearia #barbearia #lucro #barbeiroempresario #financas", "Se você tira um dia de folga e a barbearia para, você não tem um negócio. Tem um emprego que você mesmo criou, e sem férias.\n\nNegócio de verdade funciona com processo, equipe treinada e padrão de atendimento que não depende de você estar na cadeira.\n\nEsse é o passo mais difícil, e o que mais muda o jogo.\n\nMarca aquele amigo barbeiro que precisa ler isso.\n\n#barbearia #gestao #empreendedorismo #barbeiroempresario #hunker", "Corte a R$ 20 lota a agenda por um mês. Depois aparece alguém cobrando R$ 15, e o cliente vai junto.\n\nQuem chega pelo preço vai embora pelo preço. Cliente fiel vem pela experiência, pelo padrão e pela confiança.\n\nCompetir no preço é uma corrida em que ninguém ganha.\n\nConcorda ou discorda? Comenta aqui.\n\n#precificacao #barbearia #gestaodebarbearia #barbeiroempresario #posicionamento", "Ninguém sai de uma barbearia falando só do degradê.\n\nO cliente lembra da recepção, da conversa, da cerveja gelada, do cuidado em cada detalhe. É isso que faz ele voltar e indicar.\n\nNa Hunker, o corte é só uma parte da experiência.\n\nQual foi a melhor experiência que você já teve numa barbearia?\n\n#experienciadocliente #barbearia #hunker #atendimento #barbeiroempresario", "Seu preço fala por você antes de qualquer conversa.\n\nQuando você cobra pouco, o cliente entende que o serviço vale pouco. Quando cobra o justo e entrega à altura, você atrai quem valoriza o seu trabalho.\n\nPreço não é só número. É posicionamento.\n\nSalva para lembrar na próxima vez que pensar em baixar o preço.\n\n#precificacao #posicionamento #barbearia #gestaodebarbearia #empreendedorismo", "Todo dono de barbearia já reclamou que não acha barbeiro bom.\n\nA verdade é que equipe boa não aparece pronta. Ela é formada com treinamento, cultura, acompanhamento e exemplo de quem lidera.\n\nSe você quer um time forte, comece a formar ele hoje.\n\nComo você treina a sua equipe? Conta aqui.\n\n#equipe #lideranca #barbearia #gestaodepessoas #hunker", "Você sabe quanto custa cada atendimento na sua barbearia?\n\nAluguel, energia, produto, comissão, impostos. Sem esse número, você define preço no chute e não sabe se está ganhando ou perdendo dinheiro.\n\nGestão começa por conhecer os próprios números.\n\nSe você não sabe esse valor, salva este post e faz a conta ainda esta semana.\n\n#gestaodebarbearia #custos #financas #barbeiroempresario #barbearia", "O talento te leva até a cadeira. A gestão te dá a liberdade de sair dela quando quiser.\n\nNão é sobre parar de cortar. É sobre ter escolha.\n\nQuem só sabe cortar fica preso. Quem aprende a gerir constrói algo maior.\n\nVocê já pensou em como seria a sua barbearia sem você na cadeira?\n\n#mentalidade #barbeiroempresario #gestao #barbearia #empreendedorismo", "Barbearia cheia sem processo vira caos: atraso, cliente esperando, produto faltando, equipe perdida.\n\nProcesso não engessa. Ele organiza, dá padrão e deixa a equipe trabalhar com tranquilidade.\n\nMovimento sem organização cansa e não dá resultado.\n\nQual processo mais faz falta na sua barbearia hoje?\n\n#processos #gestaodebarbearia #barbearia #organizacao #barbeiroempresario", "Desconto traz cliente uma vez. Padrão traz o cliente de volta todo mês.\n\nO cliente fiel é aquele que sabe exatamente o que vai encontrar quando entrar na sua barbearia: o mesmo cuidado, a mesma qualidade, sempre.\n\nConsistência fideliza. Promoção não.\n\nSalva e compartilha com quem vive fazendo promoção.\n\n#fidelizacao #barbearia #atendimento #gestaodebarbearia #hunker", "Enquanto você dorme, alguém está olhando o seu perfil e decidindo se vai marcar horário.\n\nO Instagram é a vitrine da sua barbearia. Foto boa, conteúdo constante e posicionamento claro vendem por você 24 horas por dia.\n\nPerfil abandonado é cliente perdido.\n\nComo está a vitrine da sua barbearia hoje?\n\n#marketingdigital #instagram #barbearia #marketingparabarbearia #barbeiroempresario", "Não é a barbearia da esquina. Não é a crise. O que mais atrasa o seu negócio é começar e parar.\n\nPostar uma semana e sumir um mês. Treinar a equipe e desistir. Organizar o caixa e largar.\n\nQuem é constante passa na frente de quem é talentoso e desiste.\n\nMarca alguém que precisa dessa lembrança hoje.\n\n#constancia #mentalidade #barbearia #disciplina #barbeiroempresario", "Crescer exige mudar, contratar, investir, errar e aprender. Dói mesmo.\n\nMas ficar parado custa clientes, oportunidades e anos de trabalho sem evolução.\n\nEntre a dor de crescer e o custo de ficar parado, eu escolho crescer.\n\nE você?\n\n#crescimento #empreendedorismo #barbearia #mentalidade #hunker", "Você não precisa de uma agenda cheia de clientes novos todo mês. Precisa de clientes que voltam.\n\nCliente recorrente custa menos, confia mais e ainda indica outros. É ele que dá estabilidade ao seu caixa.\n\nCuide de quem já está com você.\n\nQuantos dos seus clientes voltaram este mês?\n\n#fidelizacao #recorrencia #barbearia #gestaodebarbearia #barbeiroempresario", "Muita barbearia tem movimento e mesmo assim não cresce. Um dos motivos é o ticket médio baixo.\n\nOferecer barba, tratamento, produto e experiência aumenta o valor de cada atendimento sem precisar de mais clientes.\n\nÀs vezes o crescimento está em quem já está na cadeira.\n\nVocê acompanha o ticket médio da sua barbearia?\n\n#ticketmedio #gestaodebarbearia #barbearia #vendas #barbeiroempresario", "Faturamento, ticket médio, retorno de clientes, produtividade da equipe.\n\nSe você não acompanha esses números, toma decisões no escuro. E decisão no escuro custa caro.\n\nO que não é medido não melhora.\n\nQual indicador você acompanha toda semana?\n\n#gestao #indicadores #barbearia #gestaodebarbearia #empreendedorismo", "Atender, cobrar, comprar produto, responder no WhatsApp, postar no Instagram, resolver problema. Tudo com você?\n\nQuando tudo passa pelo dono, o negócio só cresce até onde ele aguenta.\n\nDelegar não é perder controle. É liberar o crescimento.\n\nO que você ainda faz sozinho e poderia delegar?\n\n#lideranca #delegar #barbearia #gestao #barbeiroempresario", "Comissão paga o trabalho. Meta mostra o caminho.\n\nBarbeiro com meta clara sabe onde precisa chegar, se desenvolve e cresce junto com a barbearia.\n\nSem direção, até o melhor profissional se acomoda.\n\nSua equipe tem metas definidas?\n\n#equipe #metas #gestaodepessoas #barbearia #lideranca", "Antes da tesoura encostar no cabelo, o cliente já decidiu se vai voltar.\n\nA luz, o cheiro, a música, a cadeira, a organização. O ambiente comunica o padrão da sua barbearia desde o primeiro passo.\n\nNa Hunker, cada detalhe foi pensado para isso.\n\nO que mais chama a sua atenção quando entra numa barbearia?\n\n#ambiente #experienciadocliente #barbearia #hunker #designdeinteriores", "Mentoria não é fórmula mágica. É aprender com quem já errou, corrigiu e sabe o caminho.\n\nCada erro que você evita é tempo e dinheiro economizados.\n\nAprender com a experiência de alguém é a forma mais inteligente de crescer.\n\nQuer saber mais sobre mentoria para donos de barbearia? Me chama no direct.\n\n#mentoria #barbeiroempresario #gestaodebarbearia #barbearia #empreendedorismo", "Nenhuma barbearia cresce nas costas de um barbeiro só.\n\nO que constrói um negócio forte é um time alinhado, que entende o propósito e entrega o mesmo padrão em cada atendimento.\n\nOrgulho da equipe Hunker.\n\nMarca alguém do seu time que veste a camisa.\n\n#equipe #hunker #barbearia #cultura #lideranca", "Disciplina não é motivação. É abrir no horário, cumprir o padrão, organizar o caixa e tratar bem cada cliente, todo dia.\n\nO resultado vem do básico bem feito, repetido muitas vezes.\n\nO extraordinário é o comum feito com constância.\n\nSalva para lembrar nos dias difíceis.\n\n#disciplina #mentalidade #barbearia #constancia #barbeiroempresario", "Agenda desorganizada gera atraso. Caixa sem controle gera prejuízo. Equipe sem direção gera retrabalho.\n\nEsses três pilares sustentam qualquer barbearia. Se um falha, os outros sentem.\n\nCuide dos três todos os dias.\n\nQual deles mais precisa de atenção na sua barbearia?\n\n#processos #gestaodebarbearia #barbearia #organizacao #empreendedorismo", "Decoração bonita chama atenção. Gestão bem feita mantém as portas abertas.\n\nJá vi barbearia linda fechar por falta de controle, e barbearia simples crescer por ter processo e números em dia.\n\nO bonito atrai. O bem administrado permanece.\n\nConcorda? Comenta aqui.\n\n#gestao #barbearia #posicionamento #barbeiroempresario #empreendedorismo", "Todo reajuste dá aquele frio na barriga. E se o cliente reclamar? E se ele for embora?\n\nMas trabalhar meses no prejuízo para não desagradar ninguém é muito pior. Quem entrega valor pode e deve cobrar o justo.\n\nReajuste com clareza e segurança.\n\nQuando foi a última vez que você reajustou seus preços?\n\n#precificacao #reajuste #barbearia #gestaodebarbearia #financas", "A sua barbearia cresce até onde a sua visão consegue enxergar.\n\nQuem pensa pequeno se contenta com pouco. Quem pensa como empresário planeja, investe e se prepara para crescer.\n\nAntes de mudar o negócio, mude a forma de pensar.\n\nO que você está fazendo hoje para expandir a sua visão?\n\n#mentalidade #barbeiroempresario #barbearia #crescimento #empreendedorismo", "Cliente satisfeito volta. Cliente encantado volta e ainda traz o amigo, o irmão e o colega de trabalho.\n\nA melhor propaganda da sua barbearia é a experiência que você entrega.\n\nEncante e o boca a boca faz o resto.\n\nMarca aqui alguém que você já indicou para a sua barbearia.\n\n#fidelizacao #indicacao #experienciadocliente #barbearia #hunker", "Curso, mentoria, livro, evento. Tudo isso parece gasto até você ver o retorno no seu negócio.\n\nConhecimento é o único investimento que ninguém tira de você e que rende para sempre.\n\nInvista em você antes de investir em qualquer outra coisa.\n\nQual foi o melhor investimento em conhecimento que você já fez?\n\n#conhecimento #aprendizado #barbeiroempresario #barbearia #mentoria", "Comecei na cadeira, com tesoura e máquina. Foi lá que aprendi tudo sobre o cliente.\n\nMas a cadeira foi só o começo. O destino é um negócio sólido, com equipe, processo e propósito.\n\nNunca esqueça de onde você veio, mas não pare por lá.\n\nOnde você quer que a sua barbearia esteja daqui a 5 anos?\n\n#visao #barbeiroempresario #hunker #barbearia #empreendedorismo"];
 const KEEP = [1,2,3,4,5,7,8,9,10,11,13,14,16,17,18,20,22,23,24,25,26,27,28,29];
 const VIS = n => KEEP.includes(n);
+const REELS = [{id:"reel_01", tag:"Preço x valor", src:"reels/reel_01.mp4?v=1", poster:"reels/reel_01.jpg?v=1", leg:"Antes de baixar o preço, olha o que você entrega.\n\nO cliente não compara só o número. Ele compara o que viveu dentro da barbearia com o que pagou. Quando sente que valeu a pena, ninguém reclama do preço. Quando não sente, até o corte barato parece caro.\n\nPreço é número. Valor é experiência. E o seu posicionamento depende do jogo que você quer jogar.\n\nQual jogo você está jogando na sua barbearia? Comenta aqui.\n\n#precificacao #posicionamento #barbearia #barbeiroempresario #gestaodebarbearia"}];
+const TOTAL = KEEP.length + REELS.length;
 const pad = n => String(n).padStart(2,'0');
 const state = {}; // id -> {status, comentario, at}
 const editing = new Set();
@@ -216,12 +227,12 @@ function buildCard(p,i){
   card.querySelector('.leg p').textContent=LEG[i]||'';
   return card;
 }
-function fillCard(card,p,i,drafts){
-  const id='post_'+pad(i+1), s=statusOf(id), d=state[id]||{}, isEditing=editing.has(id);
+function fillCard(card,p,i,drafts,rid,label){
+  const id=rid||('post_'+pad(i+1)), s=statusOf(id), d=state[id]||{}, isEditing=editing.has(id);
   card.dataset.status=s;
   const pillTxt={pendente:'Pendente',aprovado:'Aprovado',ajuste:'Ajuste pedido',reprovado:'Reprovado'}[s];
   const dyn=card.querySelector('.dyn');
-  dyn.innerHTML=`<div class="row"><span class="num">Post ${pad(i+1)}<small></small></span><span class="pill ${s}">${pillTxt}</span></div>
+  dyn.innerHTML=`<div class="row"><span class="num">${label||('Post '+pad(i+1))}<small></small></span><span class="pill ${s}">${pillTxt}</span></div>
     ${s==='ajuste' && d.comentario && !isEditing ? `<div class="said"><b>Ajuste pedido</b><span></span></div>`:''}
     ${d.at && s!=='pendente' ? `<div class="when">Atualizado em ${fmt(d.at)} ${d.sent?'<span class="sent">· enviado no WhatsApp</span>':''}</div>`:''}
     ${isEditing ? `<div class="cmt"><label for="c_${id}">O que você quer mudar?</label><textarea id="c_${id}" placeholder="Ex.: trocar a foto, mudar uma palavra da frase..."></textarea><button class="save" type="button" data-save="${id}">Salvar ajuste</button></div>`:''}`;
@@ -234,21 +245,21 @@ function fillCard(card,p,i,drafts){
 }
 function render(){
   const act=document.activeElement, actId=act&&act.tagName==='TEXTAREA'?act.id:null, selS=act?.selectionStart;
-  const drafts={}; grid.querySelectorAll('textarea').forEach(t=>drafts[t.id]=t.value);
+  const drafts={}; document.querySelectorAll('#grid textarea, #reels textarea').forEach(t=>drafts[t.id]=t.value);
   let ok=0, adj=0, rej=0;
-  KEEP.forEach(n=>{ const s=statusOf('post_'+pad(n)); if(s==='aprovado')ok++; else if(s==='ajuste')adj++; else if(s==='reprovado')rej++; });
+  KEEP.map(n=>'post_'+pad(n)).concat(REELS.map(r=>r.id)).forEach(id=>{ const s=statusOf(id); if(s==='aprovado')ok++; else if(s==='ajuste')adj++; else if(s==='reprovado')rej++; });
   document.getElementById('nRej').textContent=rej;
-  document.getElementById('pRej').style.width=(rej/KEEP.length*100)+'%';
-  const sel=selecionados(); document.getElementById('nSel').textContent=sel.length;
+  document.getElementById('pRej').style.width=(rej/TOTAL*100)+'%';
+  const sel=selecionados().concat(reelSel()); document.getElementById('nSel').textContent=sel.length;
   document.getElementById('selWord').textContent=sel.length===1?'selecionado':'selecionados';
   document.getElementById('sel2Txt').textContent='Enviar '+(sel.length===1?'1 selecionado':sel.length+' selecionados');
   document.getElementById('waSel2').disabled=!sel.length; if(!sel.length) document.getElementById('sel2Txt').textContent='Enviar selecionados (0)';
   document.getElementById('sendbar').hidden=!sel.length; document.body.classList.toggle('has-sel',sel.length>0);
   document.getElementById('nOk').textContent=ok;
   document.getElementById('nAdj').textContent=adj;
-  document.getElementById('nPend').textContent=KEEP.length-ok-adj-rej;
-  document.getElementById('pOk').style.width=(ok/KEEP.length*100)+'%';
-  document.getElementById('pAdj').style.width=(adj/KEEP.length*100)+'%';
+  document.getElementById('nPend').textContent=TOTAL-ok-adj-rej;
+  document.getElementById('pOk').style.width=(ok/TOTAL*100)+'%';
+  document.getElementById('pAdj').style.width=(adj/TOTAL*100)+'%';
   let shown=0;
   grid.querySelector('.empty')?.remove();
   POSTS.forEach((p,i)=>{
@@ -261,7 +272,27 @@ function render(){
   });
   if(actId){ const t=document.getElementById(actId); if(t){ t.focus({preventScroll:true}); try{t.setSelectionRange(selS,selS)}catch(e){} } }
   if(!shown){ const e=document.createElement('p'); e.className='empty'; e.textContent='Nenhum post neste filtro.'; grid.appendChild(e); }
+  renderReels(drafts);
 }
+const reelBox=document.getElementById('reels'), reelCards={};
+function renderReels(drafts){
+  let shownR=0;
+  REELS.forEach((r,i)=>{
+    let card=reelCards[r.id];
+    if(!card){ card=reelCards[r.id]=document.createElement('article'); card.className='card';
+      card.innerHTML=`<video class="reelvid" controls playsinline preload="metadata"></video>
+        <div class="meta"><div class="dyn"></div>
+        <div class="leg"><div class="legh">Legenda</div><p></p><button class="copy" type="button" data-copyr="${i}">Copiar legenda</button></div>
+        <div class="actions"></div></div>`;
+      const v=card.querySelector('video'); v.src=r.src; v.poster=r.poster;
+      card.querySelector('.leg p').textContent=r.leg; reelBox.appendChild(card); }
+    const s=statusOf(r.id), show=filter==='todos'||s===filter||editing.has(r.id);
+    card.hidden=!show; if(show) shownR++;
+    fillCard(card,{tag:r.tag},-1,drafts,r.id,'Reel '+pad(i+1));
+  });
+  document.getElementById('reelsH').hidden=!shownR;
+}
+function reelSel(){ return REELS.map(r=>r.id).filter(id=>{ const d=state[id]; return d && d.status && d.status!=='pendente' && !d.sent; }); }
 
 async function save(id, body){
   state[id] = {...body};
@@ -272,21 +303,24 @@ const WA_NUM='5547988564125';
 function openWa(msg){ const u='https://wa.me/'+WA_NUM+'?text='+encodeURIComponent(msg); const w=window.open(u,'_blank'); if(!w) location.href=u; }
 function selecionados(){ return KEEP.filter(n=>{ const d=state['post_'+pad(n)]; return d && d.status && d.status!=='pendente' && !d.sent; }); }
 function persist(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
-function mensagem(list){ const ok=[],adj=[],rej=[];
+function mensagem(list,rlist){ rlist=rlist||[]; const ok=[],adj=[],rej=[];
   list.forEach(n=>{ const s=statusOf('post_'+pad(n)); (s==='aprovado'?ok:s==='ajuste'?adj:rej).push(n); });
-  let m='Oi! Retorno dos posts do @omichelmueller ('+list.length+(list.length===1?' post':' posts')+'):\n';
+  const tot=list.length+rlist.length; let m='Oi! Retorno do conteúdo do @omichelmueller ('+tot+(tot===1?' item':' itens')+'):\n';
+  rlist.forEach(id=>{ const k=REELS.findIndex(r=>r.id===id), s=statusOf(id), nm='Reel '+pad(k+1)+' ('+REELS[k].tag+')';
+    m+='\n🎬 '+nm+': '+(s==='aprovado'?'✅ aprovado':s==='ajuste'?'✏️ ajuste: '+((state[id]||{}).comentario||''):'❌ reprovado')+'\n'; });
   if(ok.length) m+='\n✅ Aprovados ('+ok.length+'): '+ok.map(pad).join(', ')+'\n';
   if(adj.length){ m+='\n✏️ Ajustes ('+adj.length+'):\n'; adj.forEach(n=>{ m+='• Post '+pad(n)+': '+((state['post_'+pad(n)]||{}).comentario||'')+'\n'; }); }
   if(rej.length) m+='\n❌ Reprovados ('+rej.length+'): '+rej.map(pad).join(', ')+'\n';
   return m; }
-function enviarSel(){ const list=selecionados(); if(!list.length) return; openWa(mensagem(list)); list.forEach(n=>{ state['post_'+pad(n)].sent=true; }); persist(); render(); }
+function enviarSel(){ const list=selecionados(), rl=reelSel(); if(!list.length&&!rl.length) return; openWa(mensagem(list,rl)); list.forEach(n=>{ state['post_'+pad(n)].sent=true; }); rl.forEach(id=>{ state[id].sent=true; }); persist(); render(); }
 document.getElementById('waSel').onclick=enviarSel;
 document.getElementById('waSel2').onclick=enviarSel;
-document.getElementById('allOk').onclick=()=>{ const at=new Date().toISOString(); KEEP.forEach(n=>{ const id='post_'+pad(n); if(statusOf(id)==='pendente') state[id]={status:'aprovado',comentario:'',at,sent:false}; }); editing.clear(); persist(); render(); };
+document.getElementById('allOk').onclick=()=>{ const at=new Date().toISOString(); KEEP.map(n=>'post_'+pad(n)).concat(REELS.map(r=>r.id)).forEach(id=>{ if(statusOf(id)==='pendente') state[id]={status:'aprovado',comentario:'',at,sent:false}; }); editing.clear(); persist(); render(); };
 function showNote(t, kind){ note.textContent=t; note.dataset.kind=kind||''; note.hidden=false; }
 
-grid.addEventListener('click', e=>{
+function onCardClick(e){
   const b=e.target.closest('button'); if(!b) return;
+  if(b.dataset.copyr!==undefined){ const t=REELS[+b.dataset.copyr].leg; (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{b.textContent='Copiada';setTimeout(()=>b.textContent='Copiar legenda',1600)}).catch(()=>{b.textContent='Selecione o texto acima'}); return; }
   if(b.dataset.open!==undefined) return openLb(+b.dataset.open);
   if(b.dataset.rej){ const id=b.dataset.rej; editing.delete(id);
     if(statusOf(id)==='reprovado') return save(id,{status:'pendente',comentario:'',at:new Date().toISOString()});
@@ -302,7 +336,9 @@ grid.addEventListener('click', e=>{
     if(!v){ t.focus(); t.placeholder='Escreva o ajuste antes de enviar.'; return; }
     editing.delete(id);
     return save(id,{status:'ajuste',comentario:v.slice(0,2000),at:new Date().toISOString(),sent:false}); }
-});
+}
+grid.addEventListener('click', onCardClick);
+reelBox.addEventListener('click', onCardClick);
 
 document.querySelector('.filters').addEventListener('click', e=>{
   const b=e.target.closest('button'); if(!b) return;
