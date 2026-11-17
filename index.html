@@ -194,6 +194,29 @@ button:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid va
 .ico{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;text-decoration:none}
 .ico svg{width:18px;height:18px}.ico.wa{background:#25d366;color:#06130b}.ico.ig{background:linear-gradient(135deg,#f58529,#dd2a7b 50%,#8134af);color:#fff}
 .portal{display:block}
+
+.bar .viewtg{display:flex;gap:4px;margin-left:auto;padding:4px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
+.viewtg button{display:grid;place-items:center;width:40px;height:36px;border:0;border-radius:10px;background:transparent;color:var(--muted);cursor:pointer}
+.viewtg button svg{width:20px;height:20px}
+.viewtg button[aria-pressed="true"]{background:rgba(255,255,255,.12);color:var(--fg)}
+body.gv .grid{grid-template-columns:repeat(3,1fr);gap:4px}
+body.gv .reelgrid{grid-template-columns:repeat(3,1fr);gap:4px}
+@media(min-width:900px){body.gv .grid,body.gv .reelgrid{grid-template-columns:repeat(5,1fr);gap:8px}}
+body.gv .card{border-radius:8px;cursor:pointer}
+body.gv .card .meta{display:none}
+body.gv .thumb{cursor:pointer}
+body.gv .reelvid{pointer-events:none}
+body.gv .card::after{content:"";position:absolute;top:6px;left:6px;width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.35);box-shadow:0 0 0 2px rgba(0,0,0,.45)}
+body.gv .card[data-status="aprovado"]::after{background:#5fb37a}
+body.gv .card[data-status="ajuste"]::after{background:#e0a03c}
+body.gv .card[data-status="reprovado"]::after{background:#e06a5f}
+body.gv .card.is-posted::after{display:none}
+body.gv .stamp{top:8px;right:6px;padding:3px 6px 2px;border-width:2px;border-radius:6px;font-size:11px;letter-spacing:.1em}
+body.gv .stamp small{display:none}
+.card.flash{animation:flash 1.4s ease}
+@keyframes flash{0%,40%{box-shadow:0 0 0 3px var(--gold)}100%{box-shadow:0 0 0 0 transparent}}
+.gvhint{display:none;margin:12px 0 0;font-size:12.5px;color:var(--muted)}
+body.gv .gvhint{display:block}
 .lateBar{align-items:center;margin:4px 0 22px;padding:14px 14px 14px 16px;font-size:14px;background:linear-gradient(90deg,rgba(255,80,60,.2),rgba(120,20,15,.15));border-color:rgba(255,99,82,.55);animation:redglow 2.4s ease-in-out infinite}
 .lateBar>span{flex:1}
 .pixBtn{flex:none;display:inline-flex;align-items:center;gap:7px;border:0;border-radius:12px;padding:10px 14px;font:800 13px var(--body);color:#16120b;background:linear-gradient(135deg,#f3d9a4,#c9a25b);cursor:pointer;white-space:nowrap}
@@ -264,6 +287,8 @@ button:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid va
       <button type="button" data-f="ajuste" aria-pressed="false">Ajustes</button>
       <button type="button" data-f="reprovado" aria-pressed="false">Reprovados</button>
     </div>
+    <div class="viewtg" role="group" aria-label="Visualização"><button type="button" data-view="grid" aria-pressed="true" aria-label="Ver em grade"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2"/></svg></button><button type="button" data-view="list" aria-pressed="false" aria-label="Ver em lista"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="7" rx="2"/><rect x="3.5" y="13.5" width="17" height="7" rx="2"/></svg></button></div>
+    <p class="gvhint">Toque em um post para abrir e aprovar.</p>
   </div>
 
   <div class="lote" role="region" aria-label="Aprovar em lote">
@@ -562,6 +587,18 @@ function placeCards(){
   const close=()=>{ cm.classList.remove('open'); document.body.style.overflow=''; lastF&&lastF.focus(); };
   $('closeCtr').onclick=close; cm.addEventListener('click',e=>{ if(e.target===cm) close(); }); document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&cm.classList.contains('open')) close(); });
   tick(); pays(); setInterval(tick,1000); setInterval(pays,6e4);
+})();
+
+(function views(){
+  let v='grid'; try{ v=localStorage.getItem('aprov-view')||'grid'; }catch(e){}
+  function apply(m){ v=m; document.body.classList.toggle('gv',m==='grid'); document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===m)));
+    document.querySelectorAll('.reelvid').forEach(x=>{ x.controls=(m!=='grid'); if(m==='grid') x.pause(); }); try{ localStorage.setItem('aprov-view',m); }catch(e){} }
+  document.addEventListener('click',e=>{ const b=e.target.closest('[data-view]'); if(b){ apply(b.dataset.view); return; }
+    if(v!=='grid') return; const c=e.target.closest('.card'); if(!c) return; e.preventDefault(); e.stopPropagation();
+    apply('list'); requestAnimationFrame(()=>{ c.scrollIntoView({behavior:'smooth',block:'start'}); c.classList.remove('flash'); void c.offsetWidth; c.classList.add('flash'); }); },true);
+  const mo=new MutationObserver(()=>{ if(v==='grid') document.querySelectorAll('.reelvid').forEach(x=>x.controls=false); });
+  mo.observe(document.body,{childList:true,subtree:true});
+  apply(v);
 })();
 render();
 
