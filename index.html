@@ -215,6 +215,26 @@ body.gv .stamp{top:8px;right:6px;padding:3px 6px 2px;border-width:2px;border-rad
 body.gv .stamp small{display:none}
 .card.flash{animation:flash 1.4s ease}
 @keyframes flash{0%,40%{box-shadow:0 0 0 3px var(--gold)}100%{box-shadow:0 0 0 0 transparent}}
+.viewtg{display:none!important}
+.bar{background:rgba(15,14,12,.55)!important;backdrop-filter:blur(22px) saturate(170%);-webkit-backdrop-filter:blur(22px) saturate(170%)}
+.bar .filters{display:inline-flex;flex-wrap:nowrap;gap:2px;padding:4px;max-width:100%;overflow-x:auto;scrollbar-width:none;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(0,0,0,.25),0 10px 30px -12px rgba(0,0,0,.7);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%)}
+.bar .filters::-webkit-scrollbar{display:none}
+.bar .filters button{flex:none;border:0!important;background:transparent!important;color:rgba(243,238,230,.72)!important;border-radius:999px;padding:8px 15px;min-height:36px;font-weight:600;white-space:nowrap;transition:background .25s,color .25s,box-shadow .25s,transform .2s}
+.bar .filters button:hover{color:#fff!important}
+.bar .filters button:active{transform:scale(.96)}
+.bar .filters button[aria-pressed="true"]{color:#fff!important;background:radial-gradient(120% 140% at 30% 0%,rgba(255,255,255,.42),rgba(255,255,255,.12) 45%,rgba(255,255,255,.06))!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.6),inset 0 -1px 1px rgba(255,255,255,.12),inset 0 0 12px rgba(255,255,255,.08),0 6px 16px -6px rgba(0,0,0,.6);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.inst .v,.inst .chip{white-space:nowrap}
+@media(max-width:520px){.inst li{flex-wrap:wrap;row-gap:6px}.inst .d{flex:1 1 100%}.inst .v{margin-left:0}}
+body.gv .card.open{grid-column:1/-1;cursor:default;border-color:rgba(201,162,91,.55)}
+body.gv .card.open .meta{display:flex}
+body.gv .card.open::after{display:none}
+body.gv .card.open .thumb img{max-height:70vh;object-fit:contain;background:#000}
+body.gv .card.open .reelvid{pointer-events:auto;max-height:75vh;object-fit:contain}
+body.gv .card.open .stamp{top:18px;right:14px;padding:6px 14px 5px;border-width:3px;font-size:22px}
+body.gv .card.open .stamp small{display:block}
+@media(min-width:760px){body.gv .card.open{display:grid;grid-template-columns:minmax(0,440px) 1fr;align-items:start}body.gv .card.open>.thumb,body.gv .card.open>.reelvid{grid-row:1/span 2}}
+.closeopen{display:none}
+body.gv .card.open .closeopen{display:flex;align-items:center;justify-content:center;position:absolute;top:10px;left:10px;z-index:4;width:36px;height:36px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;font-size:16px;cursor:pointer}
 .gvhint{display:none;margin:12px 0 0;font-size:12.5px;color:var(--muted)}
 body.gv .gvhint{display:block}
 .lateBar{align-items:center;margin:4px 0 22px;padding:14px 14px 14px 16px;font-size:14px;background:linear-gradient(90deg,rgba(255,80,60,.2),rgba(120,20,15,.15));border-color:rgba(255,99,82,.55);animation:redglow 2.4s ease-in-out infinite}
@@ -288,7 +308,7 @@ body.gv .gvhint{display:block}
       <button type="button" data-f="reprovado" aria-pressed="false">Reprovados</button>
     </div>
     <div class="viewtg" role="group" aria-label="Visualização"><button type="button" data-view="grid" aria-pressed="true" aria-label="Ver em grade"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2"/></svg></button><button type="button" data-view="list" aria-pressed="false" aria-label="Ver em lista"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="7" rx="2"/><rect x="3.5" y="13.5" width="17" height="7" rx="2"/></svg></button></div>
-    <p class="gvhint">Toque em um post para abrir e aprovar.</p>
+    <p class="gvhint">Toque em um post para ver a legenda e aprovar.</p>
   </div>
 
   <div class="lote" role="region" aria-label="Aprovar em lote">
@@ -502,6 +522,7 @@ function onCardClick(e){
 }
 grid.addEventListener('click', onCardClick);
 reelBox.addEventListener('click', onCardClick);
+['aprovGrid','aprovReels','pubGrid','pubReels'].forEach(id=>{ const el=document.getElementById(id); if(el) el.addEventListener('click', onCardClick); });
 
 document.querySelector('.filters').addEventListener('click', e=>{
   const b=e.target.closest('button'); if(!b) return;
@@ -565,16 +586,18 @@ function placeCards(){
     const list=[]; for(let mo=0;mo<3;mo++){ for(const dd of [1,15]){ list.push(new Date(2026,10+mo,dd)); } }
     const iso=d=>d.getFullYear()+'-'+z(d.getMonth()+1)+'-'+z(d.getDate());
     const fmt=d=>d.toLocaleDateString('pt-BR',{day:'2-digit',month:'short'}).replace('.','');
+    // se o vencimento cair no sábado ou domingo, vale o dia útil seguinte (segunda)
+    const util=d=>{ const e=new Date(d); const w=e.getDay(); if(w===6) e.setDate(e.getDate()+2); else if(w===0) e.setDate(e.getDate()+1); return e; };
     let late=[], html='', nextShown=0;
-    list.forEach((d,i)=>{ const k=iso(d), paid=isPaid(k), isLate=!paid && d<today; const dias=Math.round((today-d)/864e5), falta=Math.round((d-today)/864e5);
-      if(isLate) late.push({d,dias,n:i%2+1});
+    list.forEach((d0,i)=>{ const d=util(d0), k=iso(d0), paid=isPaid(k), isLate=!paid && d<today; const dias=Math.round((today-d)/864e5), falta=Math.round((d-today)/864e5), moved=d.getTime()!==d0.getTime();
+      if(isLate) late.push({d,d0,dias,n:i%2+1,moved});
       if(!paid && !isLate && nextShown>=2) return; if(!paid && !isLate) nextShown++;
       const chip= paid? '<span class="chip paid"><i></i>Pago</span>' : isLate? '<span class="chip late"><i></i>Em atraso · '+dias+(dias===1?' dia':' dias')+'</span>' : '<span class="chip soon"><i></i>'+(falta===0?'Vence hoje':'Em '+falta+' dias')+'</span>';
       const btn= !ADMIN||FIXOS[k] ? '' : (paid? '<button class="paybtn undo" type="button" data-pay="'+k+'">Desfazer</button>' : (d<=today||falta<=5? '<button class="paybtn" type="button" data-pay="'+k+'">Marcar pago</button>' : ''));
-      html+='<li><span class="d">'+fmt(d)+'<small>'+(i%2?'2ª parcela':'1ª parcela · antecipada')+'</small></span><span class="v">R$ 1.250,00</span>'+chip+btn+'</li>'; });
+      html+='<li><span class="d">'+fmt(d0)+'<small>'+(i%2?'2ª parcela':'1ª parcela · antecipada')+(moved&&!paid?' · vence '+fmt(d):'')+'</small></span><span class="v">R$ 1.250,00</span>'+chip+btn+'</li>'; });
     document.querySelectorAll('.instList').forEach(u=>u.innerHTML=html);
     if(late.length){ const l=late[0];
-      document.querySelectorAll('.payAlertTxt').forEach(e=>e.innerHTML='<b>'+(l.n===2?'2ª':'1ª')+' parcela de '+l.d.toLocaleDateString('pt-BR',{month:'long'})+' em atraso</b> há '+l.dias+(l.dias===1?' dia':' dias')+'. Vencimento em '+l.d.toLocaleDateString('pt-BR')+' · R$ 1.250,00 via Pix.'+(late.length>1?' ('+late.length+' parcelas em aberto)':''));
+      document.querySelectorAll('.payAlertTxt').forEach(e=>e.innerHTML='<b>'+(l.n===2?'2ª':'1ª')+' parcela de '+l.d.toLocaleDateString('pt-BR',{month:'long'})+' em atraso</b> há '+l.dias+(l.dias===1?' dia':' dias')+'. Vencimento em '+l.d.toLocaleDateString('pt-BR')+(l.moved?' ('+l.d0.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})+' caiu no fim de semana)':'')+' · R$ 1.250,00 via Pix.'+(late.length>1?' ('+late.length+' parcelas em aberto)':''));
       $('portal').hidden=false; $('payChip').className='chip late'; $('payChip').innerHTML='<i></i>Pendente'; }
     else { $('portal').hidden=true; $('payChip').className='chip paid'; $('payChip').innerHTML='<i></i>Em dia'; }
   }
@@ -590,15 +613,21 @@ function placeCards(){
 })();
 
 (function views(){
-  let v='grid'; try{ v=localStorage.getItem('aprov-view')||'grid'; }catch(e){}
-  function apply(m){ v=m; document.body.classList.toggle('gv',m==='grid'); document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===m)));
-    document.querySelectorAll('.reelvid').forEach(x=>{ x.controls=(m!=='grid'); if(m==='grid') x.pause(); }); try{ localStorage.setItem('aprov-view',m); }catch(e){} }
-  document.addEventListener('click',e=>{ const b=e.target.closest('[data-view]'); if(b){ apply(b.dataset.view); return; }
-    if(v!=='grid') return; const c=e.target.closest('.card'); if(!c) return; e.preventDefault(); e.stopPropagation();
-    apply('list'); requestAnimationFrame(()=>{ c.scrollIntoView({behavior:'smooth',block:'start'}); c.classList.remove('flash'); void c.offsetWidth; c.classList.add('flash'); }); },true);
-  const mo=new MutationObserver(()=>{ if(v==='grid') document.querySelectorAll('.reelvid').forEach(x=>x.controls=false); });
-  mo.observe(document.body,{childList:true,subtree:true});
-  apply(v);
+  document.body.classList.add('gv');
+  function noCtl(){ document.querySelectorAll('.card:not(.open) .reelvid').forEach(x=>{ x.controls=false; }); }
+  function closeAll(except){ document.querySelectorAll('.card.open').forEach(c=>{ if(c!==except){ c.classList.remove('open'); const v=c.querySelector('.reelvid'); if(v){ v.pause(); v.controls=false; } } }); }
+  document.addEventListener('click',e=>{
+    const x=e.target.closest('.closeopen'); if(x){ e.preventDefault(); e.stopPropagation(); closeAll(); return; }
+    const c=e.target.closest('.card'); if(!c) return;
+    if(c.classList.contains('open')) return; // dentro do post aberto, tudo funciona normal
+    e.preventDefault(); e.stopPropagation();
+    closeAll(c); c.classList.add('open');
+    if(!c.querySelector('.closeopen')){ const b=document.createElement('button'); b.type='button'; b.className='closeopen'; b.setAttribute('aria-label','Fechar'); b.textContent='✕'; c.appendChild(b); }
+    const v=c.querySelector('.reelvid'); if(v) v.controls=true;
+    requestAnimationFrame(()=>{ const bar=document.querySelector('.bar'); const off=(bar?bar.getBoundingClientRect().height:0)+12; window.scrollTo({top:c.getBoundingClientRect().top+window.scrollY-off,behavior:'smooth'}); c.classList.remove('flash'); void c.offsetWidth; c.classList.add('flash'); });
+  },true);
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeAll(); });
+  new MutationObserver(noCtl).observe(document.body,{childList:true,subtree:true});
 })();
 render();
 
