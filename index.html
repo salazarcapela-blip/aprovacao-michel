@@ -135,6 +135,27 @@ button:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid va
 @media (max-width:560px){.reelgrid{grid-template-columns:1fr}}
 .reelvid{display:block;width:100%;aspect-ratio:9/16;background:#000;object-fit:cover}
 .leg .copy{margin:0 12px 12px;font:700 13px var(--body);border-radius:10px;min-height:40px;padding:0 14px;cursor:pointer;border:1px solid var(--gold);background:transparent;color:var(--gold)}
+
+.portal{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:6px 0 22px}
+@media(max-width:860px){.portal{grid-template-columns:1fr}}
+.pcard{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+.pcard h3{margin:0 0 8px;font:700 12px var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.pcard p{margin:0 0 6px;color:var(--muted);font-size:14px}
+.pcard p b{color:var(--fg)}
+.cd{display:flex;gap:8px;margin:10px 0 8px}
+.cd div{flex:1;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:8px 4px;text-align:center}
+.cd b{display:block;font:800 22px var(--display);color:var(--fg);font-variant-numeric:tabular-nums}
+.cd span{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.cbar{height:6px;background:var(--line);border-radius:6px;overflow:hidden}.cbar i{display:block;height:100%;background:var(--gold);width:0}
+.due{display:flex;gap:8px;margin:10px 0}.due div{flex:1;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
+.due b{display:block;font:800 20px var(--display)}.due span{font-size:12px;color:var(--muted)}
+.due div.next{border-color:var(--gold)}.due div.next span{color:var(--gold)}
+.plinks{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.plinks a{display:flex;align-items:center;justify-content:center;gap:8px;min-height:42px;border-radius:12px;font:700 14px var(--body);text-decoration:none}
+.plinks .pwa{background:#25d366;color:#08140c}.plinks .pig{border:1px solid var(--gold);color:var(--gold)}
+.plinks svg{width:18px;height:18px}
+.aprovsec{margin-top:30px;padding-top:18px;border-top:1px solid var(--line)}
+.aprovsec .sech small{color:var(--ok)}
 </style>
 
 <div class="wrap">
@@ -144,10 +165,35 @@ button:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid va
       <div>
         <div class="eyebrow">Aprovação de conteúdo</div>
         <h1>@omichelmueller</h1>
-        <p class="sub">Marque cada post e cada reel como <b>Aprovar</b>, <b>Pedir ajuste</b> ou <b>Reprovar</b>. Os marcados vão somando na barra verde e você envia todos juntos pelo WhatsApp. Para ver em tamanho grande, toque na imagem. A legenda de cada post fica logo abaixo da imagem, para aprovar junto. As respostas ficam salvas neste aparelho.</p>
+        <p class="sub">Marque cada post e cada reel como <b>Aprovar</b>, <b>Pedir ajuste</b> ou <b>Reprovar</b>. Ao aprovar, o post vai direto para a área <b>Aprovados</b>, no fim da página. Para ver em tamanho grande, toque na imagem. A legenda de cada post fica logo abaixo da imagem, para aprovar junto. As respostas ficam salvas neste aparelho.</p>
       </div>
     </div>
   </header>
+
+  <section class="portal" aria-label="Portal do cliente">
+    <div class="pcard">
+      <h3>Seu contrato</h3>
+      <p><b>Gestão de redes sociais</b><br>5 posts por semana com Reels + 1 diária de fotos por mês</p>
+      <p>Início <b>01/11/2026</b> · vigência inicial de <b>3 meses</b>, até <b>31/01/2027</b></p>
+      <div class="cd" id="cd" aria-live="off"><div><b id="cdD">--</b><span>dias</span></div><div><b id="cdH">--</b><span>horas</span></div><div><b id="cdM">--</b><span>min</span></div><div><b id="cdS">--</b><span>seg</span></div></div>
+      <div class="cbar" aria-hidden="true"><i id="cdBar"></i></div>
+      <p id="cdTxt" style="margin-top:6px;font-size:13px"></p>
+    </div>
+    <div class="pcard">
+      <h3>Pagamento</h3>
+      <p>Mensalidade em <b>2 parcelas</b> por mês</p>
+      <div class="due"><div id="due1"><b>Dia 01</b><span>1ª parcela</span></div><div id="due15"><b>Dia 15</b><span>2ª parcela</span></div></div>
+      <p id="dueTxt"></p>
+    </div>
+    <div class="pcard">
+      <h3>Fale comigo</h3>
+      <p><b>Jeferson Salazar</b><br>Produtor audiovisual</p>
+      <div class="plinks">
+        <a class="pwa" href="https://wa.me/5547988564125" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.4 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.3.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg> WhatsApp (47) 98856-4125</a>
+        <a class="pig" href="https://instagram.com/jefersonsalazar_" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg> @jefersonsalazar_</a>
+      </div>
+    </div>
+  </section>
 
   <div class="bar" role="region" aria-label="Progresso">
     <div class="stats" aria-live="polite">
@@ -176,6 +222,11 @@ button:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid va
   <div class="reelgrid" id="reels"></div>
   <h2 class="sech">Feed <small>posts</small></h2>
   <div class="grid" id="grid"></div>
+  <section class="aprovsec" id="aprovSec" hidden>
+    <h2 class="sech">Aprovados <small>prontos para publicar</small></h2>
+    <div class="reelgrid" id="aprovReels"></div>
+    <div class="grid" id="aprovGrid" style="margin-top:14px"></div>
+  </section>
 </div>
 
 <div class="sendbar" id="sendbar" hidden role="region" aria-label="Enviar selecionados"><div class="sendin"><span class="seltxt"><b id="nSel">0</b> <span id="selWord">selecionados</span> para enviar</span><button class="wa" type="button" id="waSel"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.4 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.3.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg> Enviar no WhatsApp</button></div></div>
@@ -273,6 +324,7 @@ function render(){
   if(actId){ const t=document.getElementById(actId); if(t){ t.focus({preventScroll:true}); try{t.setSelectionRange(selS,selS)}catch(e){} } }
   if(!shown){ const e=document.createElement('p'); e.className='empty'; e.textContent='Nenhum post neste filtro.'; grid.appendChild(e); }
   renderReels(drafts);
+  placeCards();
 }
 const reelBox=document.getElementById('reels'), reelCards={};
 function renderReels(drafts){
@@ -367,6 +419,32 @@ document.getElementById('lbClose').onclick=closeLb;
 lb.addEventListener('click',e=>{ if(e.target===lb) closeLb(); });
 lb.addEventListener('keydown',e=>{ if(e.key==='Escape')closeLb(); if(e.key==='ArrowRight')step(1); if(e.key==='ArrowLeft')step(-1); });
 
+
+function placeCards(){
+  const ag=document.getElementById('aprovGrid'), ar=document.getElementById('aprovReels'); let n=0;
+  KEEP.forEach(k=>{ const id='post_'+pad(k), c=cards[id]; if(!c) return; const ap=statusOf(id)==='aprovado'&&!editing.has(id); const t=ap?ag:grid; if(c.parentNode!==t||ap) t.appendChild(c); if(ap&&!c.hidden) n++; });
+  REELS.forEach(r=>{ const c=reelCards[r.id]; if(!c) return; const ap=statusOf(r.id)==='aprovado'&&!editing.has(r.id); const t=ap?ar:reelBox; if(c.parentNode!==t||ap) t.appendChild(c); if(ap&&!c.hidden) n++; });
+  document.getElementById('aprovSec').hidden=!n;
+  const pend=[...grid.querySelectorAll('.card')].some(c=>!c.hidden); const em=grid.querySelector('.empty'); if(em) em.hidden=pend; 
+  document.getElementById('reelsH').hidden=![...reelBox.querySelectorAll('.card')].some(c=>!c.hidden);
+}
+(function portal(){
+  const ini=new Date('2026-11-01T00:00:00-03:00').getTime(), fim=new Date('2027-02-01T00:00:00-03:00').getTime();
+  const z=n=>String(n).padStart(2,'0');
+  function tick(){ const now=Date.now(); let r=Math.max(0,fim-now);
+    const d=Math.floor(r/864e5); r-=d*864e5; const h=Math.floor(r/36e5); r-=h*36e5; const m=Math.floor(r/6e4); const s=Math.floor((r-m*6e4)/1e3);
+    document.getElementById('cdD').textContent=d; document.getElementById('cdH').textContent=z(h); document.getElementById('cdM').textContent=z(m); document.getElementById('cdS').textContent=z(s);
+    const p=Math.min(100,Math.max(0,(now-ini)/(fim-ini)*100)); document.getElementById('cdBar').style.width=p+'%';
+    document.getElementById('cdTxt').textContent= now>=fim ? 'Vigência inicial concluída. A continuidade segue pelo aditivo do contrato.' : (now<ini ? 'O contrato começa em 01/11/2026.' : Math.round(p)+'% da vigência inicial concluída');
+  }
+  function due(){ const t=new Date(); const today=new Date(t.getFullYear(),t.getMonth(),t.getDate());
+    let next; if(today.getDate()<=1) next=new Date(t.getFullYear(),t.getMonth(),1); else if(today.getDate()<=15) next=new Date(t.getFullYear(),t.getMonth(),15); else next=new Date(t.getFullYear(),t.getMonth()+1,1);
+    const dias=Math.round((next-today)/864e5); const f=next.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});
+    document.getElementById('due1').classList.toggle('next',next.getDate()===1); document.getElementById('due15').classList.toggle('next',next.getDate()===15);
+    document.getElementById('dueTxt').innerHTML='Próximo vencimento: <b>'+f+'</b> · '+(dias===0?'<b>vence hoje</b>':dias===1?'falta 1 dia':'faltam '+dias+' dias');
+  }
+  tick(); due(); setInterval(tick,1000); setInterval(due,6e4);
+})();
 render();
 
 
