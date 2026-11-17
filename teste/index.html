@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Aprovação · @omichelmueller (teste)</title>
+<style>
+:root{--bg:#000;--bg2:#121212;--line:#262626;--fg:#f5f5f5;--muted:#a8a8a8;--link:#e0f1ff;--mention:#84a1f9;--blue:#0095f6;--gold:#c9a25b;--ok:#3fbf6f;--warn:#f0a43a;
+--font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Helvetica,Arial,sans-serif;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:15px;-webkit-text-size-adjust:100%}
+[hidden]{display:none!important}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+img,video{display:block;max-width:100%}
+.app{max-width:470px;margin:0 auto;min-height:100vh;border-left:1px solid var(--line);border-right:1px solid var(--line);padding-bottom:110px}
+/* barra de teste */
+.testbar{background:#2a2208;color:#f4d58d;font-size:12px;text-align:center;padding:6px 10px;letter-spacing:.02em}
+.toggle{display:flex;gap:6px;justify-content:center;padding:10px 12px 4px}
+.toggle button{font-size:13px;font-weight:600;padding:7px 14px;border-radius:99px;border:1px solid var(--line);color:var(--muted)}
+.toggle button[aria-pressed="true"]{background:var(--fg);color:#000;border-color:var(--fg)}
+/* topo do instagram */
+.top{display:flex;align-items:center;gap:6px;padding:10px 16px;position:sticky;top:0;background:var(--bg);z-index:5}
+.top .user{font-weight:700;font-size:20px;display:flex;align-items:center;gap:6px}
+.badge{width:18px;height:18px;flex:none}
+.top .sp{flex:1}
+.ico{width:24px;height:24px;stroke:var(--fg);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.head{display:flex;align-items:center;gap:20px;padding:6px 16px 0}
+.av{width:86px;height:86px;border-radius:50%;object-fit:cover;flex:none}
+.hr{flex:1;min-width:0}
+.name{font-weight:600;font-size:15px;margin-bottom:8px}
+.stats{display:flex;justify-content:space-between;max-width:250px}
+.stats b{display:block;font-size:17px}
+.stats span{font-size:14px}
+.bio{padding:12px 16px 0;font-size:14px;line-height:1.4;white-space:pre-line}
+.bio .m{color:var(--mention)}
+.btns{display:grid;grid-template-columns:1fr 1fr 34px;gap:6px;padding:14px 16px 0}
+.btns div{background:#262626;border-radius:8px;text-align:center;font-weight:600;font-size:14px;padding:7px 0}
+.hl{display:flex;gap:16px;padding:16px;overflow-x:auto}
+.hl div{text-align:center;font-size:12px;color:var(--fg)}
+.hl i{display:block;width:62px;height:62px;border-radius:50%;border:1px solid #444;margin-bottom:6px;background:#111 center/cover}
+.tabs{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--line);position:sticky;top:48px;background:var(--bg);z-index:4}
+.tabs button{padding:12px 0;display:flex;justify-content:center;border-bottom:1px solid transparent;opacity:.5}
+.tabs button[aria-selected="true"]{opacity:1;border-bottom-color:var(--fg)}
+/* grade */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.cell{position:relative;aspect-ratio:3/4;overflow:hidden;background:#111}
+.reels .cell{aspect-ratio:9/16}
+.cell img{width:100%;height:100%;object-fit:cover}
+.cell .tr{position:absolute;top:6px;right:6px;width:20px;height:20px;filter:drop-shadow(0 0 2px rgba(0,0,0,.7))}
+.cell .tr path,.cell .tr rect,.cell .tr polygon{fill:#fff;stroke:none}
+.cell .st{position:absolute;left:6px;bottom:6px;font-size:11px;font-weight:700;padding:3px 7px;border-radius:99px;background:rgba(0,0,0,.65)}
+.cell .st.aprovado{background:var(--ok);color:#04150a}
+.cell .st.ajuste{background:var(--warn);color:#1a1004}
+.cell .views{position:absolute;left:6px;bottom:6px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:3px;text-shadow:0 0 3px #000}
+.reels .cell .st{left:auto;right:6px}
+/* barra de progresso fixa */
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:8;display:flex;justify-content:center;pointer-events:none}
+.dock>div{pointer-events:auto;width:100%;max-width:470px;background:rgba(18,18,18,.96);border-top:1px solid var(--line);padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;gap:12px}
+.cnt{font-size:12px;color:var(--muted);line-height:1.35;flex:1}
+.cnt b{color:var(--fg)}
+.bar{height:4px;background:#333;border-radius:9px;overflow:hidden;display:flex;margin-top:5px}
+.bar i{height:100%}
+.send{background:var(--blue);color:#fff;font-weight:600;font-size:14px;padding:10px 14px;border-radius:8px;text-decoration:none;white-space:nowrap}
+/* visualizador */
+.view{position:fixed;inset:0;z-index:20;background:var(--bg);overflow-y:auto}
+.view .in{max-width:470px;margin:0 auto;padding-bottom:40px}
+.vtop{display:flex;align-items:center;gap:10px;padding:10px 12px;position:sticky;top:0;background:var(--bg);z-index:2}
+.vtop img{width:32px;height:32px;border-radius:50%;object-fit:cover}
+.vtop .u{font-weight:600;font-size:14px;display:flex;gap:4px;align-items:center}
+.vtop .sp{flex:1}
+.vtop .x{font-size:28px;line-height:1;padding:0 6px}
+.media{position:relative}
+.slides{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.slides::-webkit-scrollbar{display:none}
+.slide{flex:0 0 100%;scroll-snap-align:center;background:#000;display:flex;align-items:center;justify-content:center}
+.slide img,.slide video{width:100%;height:auto}
+.media.r .slide video{max-height:78vh;width:auto}
+.counter{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.65);font-size:12px;font-weight:600;padding:4px 9px;border-radius:99px}
+.mute{position:absolute;bottom:10px;right:10px;background:rgba(0,0,0,.65);border-radius:50%;width:30px;height:30px;font-size:14px}
+.dots{display:flex;justify-content:center;gap:4px;padding:10px 0 2px}
+.dots i{width:6px;height:6px;border-radius:50%;background:#555}
+.dots i.on{background:var(--blue)}
+.acts{display:flex;gap:14px;padding:8px 12px}
+.cap{padding:2px 12px 0;font-size:14px;line-height:1.45;white-space:pre-line}
+.cap b{font-weight:600}
+.kind{padding:10px 12px 0;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.ap{margin:16px 12px 0;border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--bg2)}
+.ap h3{margin:0 0 10px;font-size:14px}
+.ap .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ap .two button{border:1px solid #3a3a3a;border-radius:8px;padding:11px 0;font-weight:600;font-size:14px}
+.ap .ok[aria-pressed="true"]{background:var(--ok);border-color:var(--ok);color:#04150a}
+.ap .adj[aria-pressed="true"]{background:var(--warn);border-color:var(--warn);color:#1a1004}
+.ap textarea{width:100%;margin-top:10px;min-height:80px;background:#000;color:var(--fg);border:1px solid #3a3a3a;border-radius:8px;padding:10px;font:14px var(--font);resize:vertical}
+.ap .save{margin-top:8px;width:100%;background:var(--warn);color:#1a1004;border-radius:8px;padding:11px 0;font-weight:700}
+.ap .said{margin-top:10px;font-size:13px;color:var(--warn)}
+.nav{display:flex;justify-content:space-between;padding:16px 12px 0}
+.nav button{border:1px solid var(--line);border-radius:8px;padding:9px 14px;font-weight:600;font-size:14px}
+/* portão */
+.gate{position:fixed;inset:0;z-index:30;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px}
+.gate form{width:100%;max-width:340px;display:flex;flex-direction:column;gap:12px;text-align:center;align-items:center}
+.gate img{width:88px;height:88px;border-radius:50%;object-fit:cover}
+.gate h2{margin:6px 0 0;font-size:22px}
+.gate p{margin:0;color:var(--muted);font-size:14px}
+.gate input{width:100%;background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:13px;color:var(--fg);font:16px var(--font)}
+.gate button{width:100%;background:var(--blue);color:#fff;border-radius:8px;padding:12px;font-weight:600}
+.gate .err{color:var(--warn);font-size:13px;min-height:18px}
+.locked .app,.locked .dock{display:none}
+</style>
+</head><body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+ <defs>
+  <symbol id="vb" viewBox="0 0 40 40"><path fill="#0095f6" d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0l-5.36 3.094Zm7.415 11.225 2.254 2.287-11.43 11.5-6.835-6.93 2.244-2.258 4.587 4.581 9.18-9.18Z"/></symbol>
+  <symbol id="i-car" viewBox="0 0 24 24"><path d="M7 3h13a1 1 0 0 1 1 1v13h-2V5H7z"/><rect x="3" y="7" width="14" height="14" rx="1.5"/></symbol>
+  <symbol id="i-reel" viewBox="0 0 24 24"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm4 5v8l7-4z"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M14 2l8 8-2 1-3-3-4 4 1 5-2 2-4-4-5 5-1-1 5-5-4-4 2-2 5 1 4-4-3-3z"/></symbol>
+ </defs>
+</svg>
+
+<div class="app" id="app">
+  <div class="testbar">VERSÃO DE TESTE · veja o feed como vai ficar e aprove cada post</div>
+  <div class="top">
+    <div class="user">omichelmueller <svg class="badge"><use href="#vb"/></svg></div>
+    <div class="sp"></div>
+    <svg class="ico" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+    <svg class="ico" viewBox="0 0 24 24" style="margin-left:14px"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>
+  </div>
+  <div class="head">
+    <img class="av" id="av" src="img/avatar_atual.jpg" alt="Foto de perfil">
+    <div class="hr">
+      <div class="name" id="pname"></div>
+      <div class="stats"><div><b id="nposts">210</b><span>posts</span></div><div><b>3.081</b><span>seguidores</span></div><div><b>564</b><span>seguindo</span></div></div>
+    </div>
+  </div>
+  <div class="bio" id="bio"></div>
+  <div class="btns"><div>Seguindo ⌄</div><div>Mensagem</div><div>+</div></div>
+  <div class="tabs" role="tablist">
+    <button role="tab" aria-selected="true" data-tab="feed" aria-label="Feed"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg></button>
+    <button role="tab" aria-selected="false" data-tab="reels" aria-label="Reels"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M3 8h18M9 3l3 5M15 3l3 5"/><path d="m10 11 5 3-5 3z"/></svg></button>
+  </div>
+  <div class="grid" id="grid"></div>
+</div>
+
+<div class="dock"><div>
+  <div class="cnt"><span><b id="nOk">0</b> aprovados · <b id="nAdj">0</b> ajustes · <b id="nPend">0</b> pendentes</span>
+    <div class="bar"><i id="pOk" style="background:var(--ok)"></i><i id="pAdj" style="background:var(--warn)"></i></div></div>
+  <a class="send" id="send" href="#" target="_blank" rel="noopener">Enviar no WhatsApp</a>
+</div></div>
+
+<div class="view" id="view" hidden role="dialog" aria-modal="true" aria-label="Post">
+  <div class="in">
+    <div class="vtop"><img id="vAv" src="" alt=""><div class="u">omichelmueller <svg class="badge" style="width:14px;height:14px"><use href="#vb"/></svg></div><div class="sp"></div><button class="x" id="vClose" aria-label="Fechar">×</button></div>
+    <div class="media" id="vMedia"><div class="slides" id="vSlides"></div><div class="counter" id="vCount" hidden></div></div>
+    <div class="dots" id="vDots"></div>
+    <div class="acts"><svg class="ico" viewBox="0 0 24 24"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7z"/></svg><svg class="ico" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-4-7.5L21 3l-1.5 4A9 9 0 0 1 21 12z"/></svg><svg class="ico" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4z"/></svg></div>
+    <div class="cap" id="vCap"></div>
+    <div class="kind" id="vKind"></div>
+    <div class="ap" id="vAp"></div>
+    <div class="nav"><button id="vPrev">‹ Anterior</button><button id="vNext">Próximo ›</button></div>
+  </div>
+</div>
+
+<script>
+// ===== CONTEÚDO (edite aqui) =====
+// tipo: 'foto' | 'carrossel' | 'reels'. Itens 'reels' aparecem no Feed e na aba Reels.
+// midias: lista de {img:'arquivo'} ou {video:'arquivo', capa:'arquivo'}
+const FRASES=["Barbeiro bom corta cabelo. Barbeiro empresário constrói patrimônio.","Agenda cheia não significa que sua barbearia dá lucro.","Se a barbearia só funciona quando você está na cadeira, você não tem um negócio. Tem um emprego.","Promoção de corte a R$ 20 não atrai cliente. Atrai quem vai embora quando aparecer um de R$ 15.","O cliente não paga pelo corte. Paga pelo que sente quando levanta da cadeira.","Preço é posicionamento. Quem cobra pouco comunica que vale pouco.","Equipe boa não se encontra. Se forma.","Quem não sabe o próprio custo por atendimento está trabalhando no escuro.","Talento te coloca na cadeira. Gestão te tira dela.","Barbearia cheia sem processo é só bagunça movimentada.","Ninguém fideliza cliente com desconto. Fideliza com padrão.","Seu Instagram é a vitrine que trabalha enquanto você dorme.","O maior concorrente da sua barbearia é a sua falta de constância.","Crescer dói. Ficar parado custa mais caro.","Você não precisa de mais clientes. Precisa de clientes que voltam.","Ticket médio baixo é o problema silencioso de muita barbearia.","Quem não mede, não gerencia. Quem não gerencia, não cresce.","O dono que faz tudo sozinho vira o gargalo do próprio negócio.","Seu barbeiro precisa de meta, não só de comissão.","O ambiente vende antes da tesoura encostar no cabelo.","Mentoria não é atalho. É não repetir erros que alguém já pagou caro para cometer.","Uma barbearia não cresce com um barbeiro bom. Cresce com um time que veste a camisa.","Disciplina é fazer o básico bem feito todos os dias, principalmente quando ninguém está olhando.","Agenda, caixa e equipe. Se um falha, o resto desmorona.","Não é sobre ter a barbearia mais bonita da cidade. É sobre ter a mais bem administrada.","Reajustar preço dá medo. Trabalhar no prejuízo deveria dar mais.","Sua barbearia é do tamanho da sua mentalidade.","Cliente satisfeito volta. Cliente encantado traz outros.","Aprender não é custo. É o investimento com maior retorno do seu negócio.","A cadeira foi o começo. O negócio é o destino."];
+const pad=n=>String(n).padStart(2,'0');
+const ITENS=[
+ {id:'carrossel_apagao',nome:'Carrossel Apagão',tipo:'carrossel',midias:[
+   {video:'apagao_01.mp4',capa:'apagao_01_poster.jpg'},{img:'apagao_02.jpg'},{img:'apagao_03.jpg'},{img:'apagao_04.jpg'},
+   {img:'apagao_05.jpg'},{img:'apagao_06.jpg'},{img:'apagao_07.jpg'},{img:'apagao_08.jpg'}],
+  legenda:'Hoje falaram em apagão. Mas tem barbearia que já vive no escuro faz tempo, e o dono só percebe quando o caixa apaga.\n\nQuando eu entro numa unidade, esses são os 4 números que eu olho primeiro: lucro, ocupação da agenda, taxa de retorno e meta do time. Se um deles está apagado, o resto não se sustenta.\n\nQual desses está no escuro aí na sua? Comenta LUZ que eu te mando no direct como acompanho isso na @barbeariahunker.\n\n#gestaodebarbearia #barbearia #empreendedorismo'},
+ {id:'carrossel_processos',nome:'Carrossel Processos',tipo:'carrossel',midias:[
+   {video:'car_01.mp4',capa:'car_01_poster.jpg'},{img:'car_02.jpg'},{img:'car_03.jpg'},{img:'car_04.jpg'},{img:'car_05.jpg'},
+   {video:'car_06.mp4',capa:'car_06_poster.jpg'},{img:'car_07.jpg'},{img:'car_08.jpg'},{img:'car_09.jpg'}],
+  legenda:'Barbearia cheia não é sinônimo de barbearia saudável. 💈\n\nAgenda, caixa e equipe. Se um falha, o resto desmorona.\n\nQual dos 3 está mais bagunçado aí hoje? Comenta: agenda, caixa ou equipe 👇\n\nSalva pra revisar depois e segue @omichelmueller pra mais conteúdo assim.'},
+];
+const PERFIS={
+ atual:{av:'img/avatar_atual.jpg',nome:'Michel Mueller | Gestor e Educador',bio:'Gestão estratégica com processos e organização financeira para donos de barbearias.\n• Fundador @barbeariahunker\n• Educador @barberday | @code.x_club'},
+ proposta:{av:'img/avatar_proposta.jpg',nome:'Michel Mueller | Gestão de Barbearia',bio:'Barbearia cheia e o dinheiro sumindo?\nEnsino a organizar agenda, caixa e equipe 💈\nFundador @barbeariahunker\nEducador @barberday | @code.x_club'}
+};
+const WHATS='5547988564125';
+// ===== FIM DO CONTEÚDO =====
+
+const KEY='aprovacao-michel-teste-v2', state={};
+try{Object.assign(state,JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(e){}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
+const st=id=>state[id]?.status||'pendente';
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const rich=s=>esc(s).replace(/@[\w.]+/g,m=>'<span class="m">'+m+'</span>');
+
+let perfil='atual',tab='feed';
+function renderPerfil(){const p=PERFIS[perfil];document.getElementById('av').src=p.av;document.getElementById('pname').textContent=p.nome;document.getElementById('bio').innerHTML=rich(p.bio);
+ document.querySelectorAll('[data-prof]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.prof===perfil)))}
+
+const lista=()=>tab==='reels'?ITENS.filter(x=>x.tipo==='reels'):ITENS;
+const thumb=m=>'img/'+(m.capa||m.img);
+const ICON={carrossel:'#i-car',reels:'#i-reel'};
+function renderGrid(){const g=document.getElementById('grid');g.className='grid'+(tab==='reels'?' reels':'');g.innerHTML='';if(!lista().length){g.innerHTML='<p style="grid-column:1/-1;text-align:center;color:var(--muted);padding:40px 16px">Nenhum Reels para aprovar no momento.</p>'}
+ lista().forEach((it,i)=>{const s=st(it.id);const c=document.createElement('button');c.className='cell';c.dataset.i=i;c.setAttribute('aria-label',it.nome);
+  const ic=tab==='feed'&&it.fixado?'#i-pin':(tab==='feed'?ICON[it.tipo]:'');
+  c.innerHTML='<img loading="lazy" alt="" src="'+thumb(it.midias[0])+'">'+(ic?'<svg class="tr"><use href="'+ic+'"/></svg>':'')+
+   (s!=='pendente'?'<span class="st '+s+'">'+(s==='aprovado'?'✓ Aprovado':'✎ Ajuste')+'</span>':'');
+  g.appendChild(c)});
+ let ok=0,adj=0;ITENS.forEach(it=>{const s=st(it.id);if(s==='aprovado')ok++;else if(s==='ajuste')adj++});
+ document.getElementById('nOk').textContent=ok;document.getElementById('nAdj').textContent=adj;document.getElementById('nPend').textContent=ITENS.length-ok-adj;
+ document.getElementById('pOk').style.width=ok/ITENS.length*100+'%';document.getElementById('pAdj').style.width=adj/ITENS.length*100+'%';
+ document.getElementById('send').href='https://wa.me/'+WHATS+'?text='+encodeURIComponent(resumo())}
+document.getElementById('grid').addEventListener('click',e=>{const c=e.target.closest('.cell');if(c)openView(+c.dataset.i)});
+document.querySelector('.tabs').addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(!b)return;tab=b.dataset.tab;
+ document.querySelectorAll('[data-tab]').forEach(x=>x.setAttribute('aria-selected',String(x===b)));renderGrid()});
+
+function resumo(){const ok=[],adj=[],pend=[];ITENS.forEach(it=>{const s=st(it.id);if(s==='aprovado')ok.push(it.nome);else if(s==='ajuste')adj.push('• '+it.nome+': '+state[it.id].comentario);else pend.push(it.nome)});
+ let t='*Aprovação de conteúdo – @omichelmueller (teste)*\n\n✅ Aprovados ('+ok.length+'): '+(ok.join(', ')||'nenhum')+'\n\n✏️ Ajustes ('+adj.length+'):\n'+(adj.join('\n')||'nenhum');
+ if(pend.length)t+='\n\n⏳ Pendentes ('+pend.length+'): '+pend.join(', ');return t}
+
+// visualizador
+const view=document.getElementById('view'),slides=document.getElementById('vSlides');let cur=0,editing=false;
+function openView(i){const L=lista();cur=(i+L.length)%L.length;const it=L[cur];editing=false;
+ document.getElementById('vAv').src=PERFIS[perfil].av;
+ document.getElementById('vMedia').className='media'+(it.tipo==='reels'?' r':'');
+ slides.innerHTML=it.midias.map(m=>'<div class="slide">'+(m.video?'<video src="img/'+m.video+'" poster="img/'+m.capa+'" muted loop playsinline preload="metadata"></video>':'<img alt="" src="img/'+m.img+'">')+'</div>').join('');
+ const n=it.midias.length,cnt=document.getElementById('vCount');cnt.hidden=n<2;
+ document.getElementById('vDots').innerHTML=n>1?it.midias.map((_,k)=>'<i'+(k?'':' class="on"')+'></i>').join(''):'';
+ document.getElementById('vCap').innerHTML='<b>omichelmueller</b> '+rich(it.legenda||'');
+ document.getElementById('vKind').textContent=it.nome+' · '+{foto:'Foto',carrossel:'Carrossel com '+n+' itens',reels:'Reels'}[it.tipo];
+ renderAp();view.hidden=false;view.scrollTop=0;document.body.style.overflow='hidden';slides.scrollLeft=0;onSlide()}
+function onSlide(){const k=Math.round(slides.scrollLeft/slides.clientWidth),n=slides.children.length;
+ document.getElementById('vCount').textContent=(k+1)+'/'+n;document.querySelectorAll('#vDots i').forEach((d,j)=>d.classList.toggle('on',j===k));
+ const sk=slides.children[k];slides.querySelectorAll('video').forEach(v=>{if(sk&&sk.contains(v))v.play().catch(()=>{});else v.pause()})}
+slides.addEventListener('scroll',()=>{clearTimeout(slides._t);slides._t=setTimeout(onSlide,80)});
+slides.addEventListener('click',e=>{const v=e.target.closest('video');if(v){v.muted=!v.muted;v.play().catch(()=>{})}});
+function renderAp(){const it=lista()[cur],s=st(it.id),d=state[it.id]||{};const ap=document.getElementById('vAp');
+ ap.innerHTML='<h3>Sua decisão sobre este '+(it.tipo==='reels'?'Reels':'post')+'</h3><div class="two"><button class="ok" aria-pressed="'+(s==='aprovado')+'">'+(s==='aprovado'?'✓ Aprovado':'Aprovar')+'</button><button class="adj" aria-pressed="'+(s==='ajuste'||editing)+'">'+(s==='ajuste'?'Editar ajuste':'Pedir ajuste')+'</button></div>'+
+ (editing?'<textarea id="vTa" placeholder="O que você quer mudar? Ex.: trocar a foto, mudar uma palavra..."></textarea><button class="save">Enviar ajuste</button>':'')+
+ (s==='ajuste'&&!editing?'<div class="said"></div>':'');
+ if(editing){const ta=document.getElementById('vTa');ta.value=d.comentario||'';ta.focus()}
+ const said=ap.querySelector('.said');if(said)said.textContent='Ajuste pedido: '+d.comentario}
+document.getElementById('vAp').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const it=lista()[cur];
+ if(b.classList.contains('ok')){editing=false;if(st(it.id)==='aprovado')delete state[it.id];else state[it.id]={status:'aprovado',at:Date.now()};persist();renderAp();renderGrid()}
+ else if(b.classList.contains('adj')){editing=!editing;renderAp()}
+ else if(b.classList.contains('save')){const v=document.getElementById('vTa').value.trim();if(!v)return;state[it.id]={status:'ajuste',comentario:v.slice(0,2000),at:Date.now()};editing=false;persist();renderAp();renderGrid()}});
+function closeView(){view.hidden=true;document.body.style.overflow='';slides.querySelectorAll('video').forEach(v=>v.pause())}
+document.getElementById('vClose').onclick=closeView;
+document.getElementById('vPrev').onclick=()=>openView(cur-1);
+document.getElementById('vNext').onclick=()=>openView(cur+1);
+document.addEventListener('keydown',e=>{if(view.hidden)return;if(e.key==='Escape')closeView();if(e.key==='ArrowRight')openView(cur+1);if(e.key==='ArrowLeft')openView(cur-1)});
+
+renderPerfil();renderGrid();
+</script>
+</body></html>
