@@ -136,30 +136,55 @@ button:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid va
 .reelvid{display:block;width:100%;aspect-ratio:9/16;background:#000;object-fit:cover}
 .leg .copy{margin:0 12px 12px;font:700 13px var(--body);border-radius:10px;min-height:40px;padding:0 14px;cursor:pointer;border:1px solid var(--gold);background:transparent;color:var(--gold)}
 
-.portal{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:6px 0 22px}
-@media(max-width:860px){.portal{grid-template-columns:1fr}}
-.pcard{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px 18px}
-.pcard h3{margin:0 0 8px;font:700 12px var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
-.pcard p{margin:0 0 6px;color:var(--muted);font-size:14px}
-.pcard p b{color:var(--fg)}
-.cd{display:flex;gap:8px;margin:10px 0 8px}
-.cd div{flex:1;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:8px 4px;text-align:center}
-.cd b{display:block;font:800 22px var(--display);color:var(--fg);font-variant-numeric:tabular-nums}
-.cd span{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
-.cbar{height:6px;background:var(--line);border-radius:6px;overflow:hidden}.cbar i{display:block;height:100%;background:var(--gold);width:0}
-.due{display:flex;gap:8px;margin:10px 0}.due div{flex:1;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
-.due b{display:block;font:800 20px var(--display)}.due span{font-size:12px;color:var(--muted)}
-.due div.next{border-color:var(--gold)}.due div.next span{color:var(--gold)}
-.plinks{display:flex;flex-direction:column;gap:8px;margin-top:10px}
-.plinks a{display:flex;align-items:center;justify-content:center;gap:8px;min-height:42px;border-radius:12px;font:700 14px var(--body);text-decoration:none}
-.plinks .pwa{background:#25d366;color:#08140c}.plinks .pig{border:1px solid var(--gold);color:var(--gold)}
+.portal{display:grid;grid-template-columns:1.25fr 1fr;grid-template-areas:"ctr pay" "ctt pay";align-items:start;gap:16px;margin:8px 0 26px}
+@media(max-width:860px){.portal{grid-template-columns:1fr;grid-template-areas:"ctr" "pay" "ctt"}}
+.pc{position:relative;overflow:hidden;border-radius:22px;padding:20px 22px;background:linear-gradient(160deg,rgba(255,255,255,.055),rgba(255,255,255,.015) 60%);border:1px solid rgba(255,255,255,.08);box-shadow:0 20px 50px -30px rgba(0,0,0,.8);backdrop-filter:blur(8px)}
+.pc::before{content:"";position:absolute;inset:-40% -20% auto auto;width:320px;height:320px;background:radial-gradient(circle,rgba(201,162,91,.16),transparent 65%);pointer-events:none}
+.pc.ctr{grid-area:ctr}.pc.pay{grid-area:pay}.pc.ctt{grid-area:ctt}
+.ph{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.ph h3{margin:0;font:700 11px var(--body);letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.chip{display:inline-flex;align-items:center;gap:6px;font:700 11px var(--body);padding:5px 10px;border-radius:999px;letter-spacing:.04em}
+.chip i{width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 10px currentColor}
+.chip.live{color:#7ee0a0;background:rgba(95,179,122,.14)}.chip.late{color:#ff8a7a;background:rgba(255,99,82,.14)}.chip.paid{color:#7ee0a0;background:rgba(95,179,122,.14)}.chip.soon{color:var(--muted);background:rgba(255,255,255,.06)}
+.pkg{font:800 26px/1.15 var(--display);margin:0 0 4px;letter-spacing:-.01em}
+.pkg em{font-style:normal;background:linear-gradient(90deg,#e8c88a,#c9a25b);-webkit-background-clip:text;background-clip:text;color:transparent}
+.pmuted{color:var(--muted);font-size:13.5px;margin:0 0 12px}
+.incl{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 16px;padding:0;list-style:none}
+.incl li{font-size:12px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07);color:#e9e2d6}
+.cd{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:4px 0 12px}
+.cd div{border-radius:16px;padding:12px 6px;text-align:center;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.06)}
+.cd b{display:block;font:800 30px/1 var(--display);font-variant-numeric:tabular-nums;background:linear-gradient(180deg,#fff,#cfc6b8);-webkit-background-clip:text;background-clip:text;color:transparent}
+.cd span{display:block;margin-top:6px;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.14em}
+.cbar{height:8px;background:rgba(255,255,255,.07);border-radius:8px;overflow:hidden}.cbar i{display:block;height:100%;width:0;border-radius:8px;background:linear-gradient(90deg,#8a6a32,#e8c88a);box-shadow:0 0 14px rgba(232,200,138,.5)}
+.cmeta{display:flex;justify-content:space-between;gap:10px;margin-top:8px;font-size:12px;color:var(--muted)}.cmeta b{color:var(--fg)}
+.cfoot{margin:12px 0 0;font-size:11.5px;color:var(--muted)}
+.alert{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:14px;background:rgba(255,99,82,.1);border:1px solid rgba(255,99,82,.35);margin-bottom:12px;font-size:13px}
+.alert b{color:#ffb3a8}.alert svg{flex:none;width:18px;height:18px;color:#ff8a7a;margin-top:1px}
+.inst{list-style:none;margin:0 0 12px;padding:0;display:flex;flex-direction:column;gap:8px}
+.inst li{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:14px;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.06)}
+.inst .d{font:800 15px var(--display)}.inst .d small{display:block;font:500 11.5px var(--body);color:var(--muted)}
+.inst .v{font-weight:700;font-variant-numeric:tabular-nums;margin-left:auto;margin-right:6px}
+.pix{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;background:linear-gradient(90deg,rgba(201,162,91,.14),rgba(201,162,91,.04));border:1px solid rgba(201,162,91,.35)}
+.pix span{font-size:10.5px;letter-spacing:.16em;color:var(--gold);font-weight:800}.pix b{flex:1;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.pix button{border:0;background:var(--gold);color:#16120b;border-radius:10px;padding:8px 12px;font:800 12px var(--body);cursor:pointer}
+.ctt .who2{display:flex;align-items:center;gap:12px;margin-bottom:12px}.ctt .av{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font:800 16px var(--display);color:#16120b;background:linear-gradient(135deg,#e8c88a,#a8823f)}
+.ctt .who2 b{display:block;font:800 16px var(--display)}.ctt .who2 span{font-size:12px;color:var(--muted)}
+.plinks{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.plinks a{display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;border-radius:14px;font:700 13px var(--body);text-decoration:none;transition:transform .15s}
+.plinks a:hover{transform:translateY(-1px)}
+.plinks .pwa{background:#25d366;color:#06130b}.plinks .pig{background:linear-gradient(135deg,#f58529,#dd2a7b 50%,#8134af);color:#fff}
 .plinks svg{width:18px;height:18px}
 .aprovsec{margin-top:30px;padding-top:18px;border-top:1px solid var(--line)}
 .aprovsec .sech small{color:var(--ok)}
-.esc{margin:4px 0 8px;font-size:13px;color:var(--muted)}.esc summary{cursor:pointer;color:var(--gold);font-weight:700}.esc ul{margin:6px 0 0;padding-left:18px}.esc li{margin:2px 0}
-.pix{display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:8px 10px;margin:8px 0}
-.pix span{font-size:11px;letter-spacing:.1em;color:var(--gold);font-weight:700}.pix b{flex:1;font-variant-numeric:tabular-nums}
-.pix button{border:1px solid var(--gold);background:transparent;color:var(--gold);border-radius:10px;padding:6px 10px;font:700 12px var(--body);cursor:pointer}
+.pubsec .sech small{color:#7ee0a0}
+.card{position:relative}
+.card.is-posted .actions{display:none}
+.stamp{position:absolute;top:18px;right:14px;z-index:3;transform:rotate(-12deg);padding:6px 14px 5px;border:3px solid #7ee0a0;border-radius:10px;color:#7ee0a0;font:900 22px/1 var(--display);letter-spacing:.14em;text-transform:uppercase;background:rgba(10,20,14,.55);backdrop-filter:blur(2px);box-shadow:0 0 0 2px rgba(10,20,14,.35),0 10px 30px -10px rgba(0,0,0,.8);text-align:center;pointer-events:none;mix-blend-mode:normal}
+.stamp small{display:block;font:700 10px var(--body);letter-spacing:.12em;margin-top:3px;opacity:.9}
+.postbtn{display:flex;align-items:center;justify-content:center;gap:8px;width:calc(100% - 24px);margin:0 12px 12px;min-height:40px;border-radius:12px;border:1px dashed rgba(126,224,160,.5);background:rgba(95,179,122,.06);color:#7ee0a0;font:700 13px var(--body);cursor:pointer}
+.postbtn.on{border-style:solid;background:rgba(95,179,122,.14)}
+.pubtag{display:inline-flex;align-items:center;gap:6px;margin:0 12px 12px;font:700 12px var(--body);color:#7ee0a0}
+.pubtag i{width:7px;height:7px;border-radius:50%;background:#7ee0a0;box-shadow:0 0 10px #7ee0a0}
 </style>
 
 <div class="wrap">
@@ -175,30 +200,29 @@ button:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid va
   </header>
 
   <section class="portal" aria-label="Portal do cliente">
-    <div class="pcard">
-      <h3>Seu contrato</h3>
-      <p><b>Pacote Autoridade</b> · marketing e gestão do @omichelmueller</p>
-      <details class="esc"><summary>O que está incluído</summary><ul><li>5 posts por semana, incluindo Reels</li><li>Gestão do perfil no Instagram</li><li>1 diária de captação por mês (fotos e vídeos)</li><li>4 Reels por mês com roteiro, edição e legenda animada</li><li>Capas e fotos no padrão do perfil</li><li>Banco de fotos da diária para o feed</li></ul></details>
-      <p>Início <b>01/11/2026</b> · vigência inicial de <b>3 meses</b>, até <b>31/01/2027</b></p>
-      <p style="font-size:12px">Renovação por termo aditivo · rescisão com aviso prévio de 30 dias</p>
-      <div class="cd" id="cd" aria-live="off"><div><b id="cdD">--</b><span>dias</span></div><div><b id="cdH">--</b><span>horas</span></div><div><b id="cdM">--</b><span>min</span></div><div><b id="cdS">--</b><span>seg</span></div></div>
+    <div class="pc ctr">
+      <div class="ph"><h3>Seu contrato</h3><span class="chip live" id="ctrChip"><i></i>Ativo</span></div>
+      <p class="pkg">Pacote <em>Autoridade</em></p>
+      <p class="pmuted">Marketing e gestão do @omichelmueller</p>
+      <ul class="incl"><li>5 posts/semana com Reels</li><li>4 Reels/mês com roteiro e edição</li><li>1 diária de captação/mês</li><li>Gestão do perfil</li><li>Capas no padrão do perfil</li><li>Banco de fotos</li></ul>
+      <div class="cd" aria-live="off"><div><b id="cdD">--</b><span>dias</span></div><div><b id="cdH">--</b><span>horas</span></div><div><b id="cdM">--</b><span>min</span></div><div><b id="cdS">--</b><span>seg</span></div></div>
       <div class="cbar" aria-hidden="true"><i id="cdBar"></i></div>
-      <p id="cdTxt" style="margin-top:6px;font-size:13px"></p>
+      <div class="cmeta"><span>Início <b>01/11/2026</b></span><span id="cdTxt"></span><span>Fim <b>31/01/2027</b></span></div>
+      <p class="cfoot">Vigência inicial de 3 meses · renovação por termo aditivo · rescisão com aviso prévio de 30 dias</p>
     </div>
-    <div class="pcard">
-      <h3>Pagamento</h3>
-      <p>Mensalidade de <b>R$ 2.500,00</b> em 2 parcelas de <b>R$ 1.250,00</b></p>
-      <div class="due"><div id="due1"><b>Dia 01</b><span>1ª parcela · antecipada</span></div><div id="due15"><b>Dia 15</b><span>2ª parcela</span></div></div>
-      <p id="dueTxt"></p>
-      <div class="pix"><span>Pix</span><b id="pixKey">94992405524</b><button type="button" id="pixCopy">Copiar chave</button></div>
-      <p style="font-size:12px">O mês começa após a confirmação da 1ª parcela.</p>
+    <div class="pc pay">
+      <div class="ph"><h3>Pagamento</h3><span class="chip" id="payChip"></span></div>
+      <div class="alert" id="payAlert" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg><span id="payAlertTxt"></span></div>
+      <ul class="inst" id="inst"></ul>
+      <div class="pix"><span>PIX</span><b id="pixKey">94992405524</b><button type="button" id="pixCopy">Copiar chave</button></div>
+      <p class="cfoot">R$ 2.500,00 por mês em 2 parcelas de R$ 1.250,00 (dia 01 antecipada e dia 15). O mês começa após a confirmação da 1ª parcela.</p>
     </div>
-    <div class="pcard">
-      <h3>Fale comigo</h3>
-      <p><b>Jeferson Salazar</b><br>Produtor audiovisual</p>
+    <div class="pc ctt">
+      <div class="ph"><h3>Fale comigo</h3></div>
+      <div class="who2"><div class="av">JS</div><div><b>Jeferson Salazar</b><span>Produtor audiovisual</span></div></div>
       <div class="plinks">
-        <a class="pwa" href="https://wa.me/5547988564125" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.4 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.3.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg> WhatsApp (47) 98856-4125</a>
-        <a class="pig" href="https://instagram.com/jefersonsalazar_" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg> @jefersonsalazar_</a>
+        <a class="pwa" href="https://wa.me/5547988564125" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.4 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.3.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg> WhatsApp</a>
+        <a class="pig" href="https://instagram.com/jefersonsalazar_" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg> Instagram</a>
       </div>
     </div>
   </section>
@@ -230,6 +254,11 @@ button:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid va
   <div class="reelgrid" id="reels"></div>
   <h2 class="sech">Feed <small>posts</small></h2>
   <div class="grid" id="grid"></div>
+  <section class="aprovsec pubsec" id="pubSec" hidden>
+    <h2 class="sech">Postados <small>já publicados no Instagram</small></h2>
+    <div class="reelgrid" id="pubReels"></div>
+    <div class="grid" id="pubGrid" style="margin-top:14px"></div>
+  </section>
   <section class="aprovsec" id="aprovSec" hidden>
     <h2 class="sech">Aprovados <small>prontos para publicar</small></h2>
     <div class="reelgrid" id="aprovReels"></div>
@@ -256,7 +285,7 @@ const POSTS = [{"tag": "Mentalidade", "t": "Barbeiro bom corta cabelo. Barbeiro 
 const LEG = ["Cortar bem é o mínimo. Foi o que me colocou na cadeira, mas não foi o que construiu a Hunker.\n\nO barbeiro que só corta troca hora por dinheiro. O barbeiro empresário cria um negócio que gera valor mesmo quando ele não está atendendo: equipe, processo, marca e números na mão.\n\nTalento abre a porta. Gestão é o que faz você crescer.\n\nVocê hoje é mais barbeiro ou mais empresário? Conta aqui nos comentários.\n\n#barbeiroempresario #barbearia #gestaodebarbearia #empreendedorismo #hunker", "Agenda lotada dá uma sensação boa. Mas sensação não paga boleto.\n\nJá vi barbearia com fila na porta e caixa no vermelho no fim do mês. Preço errado, custo que ninguém calcula, comissão que não fecha a conta.\n\nAntes de comemorar a agenda cheia, olha o que sobra no final.\n\nSalva este post para lembrar na hora de fechar o mês.\n\n#gestaodebarbearia #barbearia #lucro #barbeiroempresario #financas", "Se você tira um dia de folga e a barbearia para, você não tem um negócio. Tem um emprego que você mesmo criou, e sem férias.\n\nNegócio de verdade funciona com processo, equipe treinada e padrão de atendimento que não depende de você estar na cadeira.\n\nEsse é o passo mais difícil, e o que mais muda o jogo.\n\nMarca aquele amigo barbeiro que precisa ler isso.\n\n#barbearia #gestao #empreendedorismo #barbeiroempresario #hunker", "Corte a R$ 20 lota a agenda por um mês. Depois aparece alguém cobrando R$ 15, e o cliente vai junto.\n\nQuem chega pelo preço vai embora pelo preço. Cliente fiel vem pela experiência, pelo padrão e pela confiança.\n\nCompetir no preço é uma corrida em que ninguém ganha.\n\nConcorda ou discorda? Comenta aqui.\n\n#precificacao #barbearia #gestaodebarbearia #barbeiroempresario #posicionamento", "Ninguém sai de uma barbearia falando só do degradê.\n\nO cliente lembra da recepção, da conversa, da cerveja gelada, do cuidado em cada detalhe. É isso que faz ele voltar e indicar.\n\nNa Hunker, o corte é só uma parte da experiência.\n\nQual foi a melhor experiência que você já teve numa barbearia?\n\n#experienciadocliente #barbearia #hunker #atendimento #barbeiroempresario", "Seu preço fala por você antes de qualquer conversa.\n\nQuando você cobra pouco, o cliente entende que o serviço vale pouco. Quando cobra o justo e entrega à altura, você atrai quem valoriza o seu trabalho.\n\nPreço não é só número. É posicionamento.\n\nSalva para lembrar na próxima vez que pensar em baixar o preço.\n\n#precificacao #posicionamento #barbearia #gestaodebarbearia #empreendedorismo", "Todo dono de barbearia já reclamou que não acha barbeiro bom.\n\nA verdade é que equipe boa não aparece pronta. Ela é formada com treinamento, cultura, acompanhamento e exemplo de quem lidera.\n\nSe você quer um time forte, comece a formar ele hoje.\n\nComo você treina a sua equipe? Conta aqui.\n\n#equipe #lideranca #barbearia #gestaodepessoas #hunker", "Você sabe quanto custa cada atendimento na sua barbearia?\n\nAluguel, energia, produto, comissão, impostos. Sem esse número, você define preço no chute e não sabe se está ganhando ou perdendo dinheiro.\n\nGestão começa por conhecer os próprios números.\n\nSe você não sabe esse valor, salva este post e faz a conta ainda esta semana.\n\n#gestaodebarbearia #custos #financas #barbeiroempresario #barbearia", "O talento te leva até a cadeira. A gestão te dá a liberdade de sair dela quando quiser.\n\nNão é sobre parar de cortar. É sobre ter escolha.\n\nQuem só sabe cortar fica preso. Quem aprende a gerir constrói algo maior.\n\nVocê já pensou em como seria a sua barbearia sem você na cadeira?\n\n#mentalidade #barbeiroempresario #gestao #barbearia #empreendedorismo", "Barbearia cheia sem processo vira caos: atraso, cliente esperando, produto faltando, equipe perdida.\n\nProcesso não engessa. Ele organiza, dá padrão e deixa a equipe trabalhar com tranquilidade.\n\nMovimento sem organização cansa e não dá resultado.\n\nQual processo mais faz falta na sua barbearia hoje?\n\n#processos #gestaodebarbearia #barbearia #organizacao #barbeiroempresario", "Desconto traz cliente uma vez. Padrão traz o cliente de volta todo mês.\n\nO cliente fiel é aquele que sabe exatamente o que vai encontrar quando entrar na sua barbearia: o mesmo cuidado, a mesma qualidade, sempre.\n\nConsistência fideliza. Promoção não.\n\nSalva e compartilha com quem vive fazendo promoção.\n\n#fidelizacao #barbearia #atendimento #gestaodebarbearia #hunker", "Enquanto você dorme, alguém está olhando o seu perfil e decidindo se vai marcar horário.\n\nO Instagram é a vitrine da sua barbearia. Foto boa, conteúdo constante e posicionamento claro vendem por você 24 horas por dia.\n\nPerfil abandonado é cliente perdido.\n\nComo está a vitrine da sua barbearia hoje?\n\n#marketingdigital #instagram #barbearia #marketingparabarbearia #barbeiroempresario", "Não é a barbearia da esquina. Não é a crise. O que mais atrasa o seu negócio é começar e parar.\n\nPostar uma semana e sumir um mês. Treinar a equipe e desistir. Organizar o caixa e largar.\n\nQuem é constante passa na frente de quem é talentoso e desiste.\n\nMarca alguém que precisa dessa lembrança hoje.\n\n#constancia #mentalidade #barbearia #disciplina #barbeiroempresario", "Crescer exige mudar, contratar, investir, errar e aprender. Dói mesmo.\n\nMas ficar parado custa clientes, oportunidades e anos de trabalho sem evolução.\n\nEntre a dor de crescer e o custo de ficar parado, eu escolho crescer.\n\nE você?\n\n#crescimento #empreendedorismo #barbearia #mentalidade #hunker", "Você não precisa de uma agenda cheia de clientes novos todo mês. Precisa de clientes que voltam.\n\nCliente recorrente custa menos, confia mais e ainda indica outros. É ele que dá estabilidade ao seu caixa.\n\nCuide de quem já está com você.\n\nQuantos dos seus clientes voltaram este mês?\n\n#fidelizacao #recorrencia #barbearia #gestaodebarbearia #barbeiroempresario", "Muita barbearia tem movimento e mesmo assim não cresce. Um dos motivos é o ticket médio baixo.\n\nOferecer barba, tratamento, produto e experiência aumenta o valor de cada atendimento sem precisar de mais clientes.\n\nÀs vezes o crescimento está em quem já está na cadeira.\n\nVocê acompanha o ticket médio da sua barbearia?\n\n#ticketmedio #gestaodebarbearia #barbearia #vendas #barbeiroempresario", "Faturamento, ticket médio, retorno de clientes, produtividade da equipe.\n\nSe você não acompanha esses números, toma decisões no escuro. E decisão no escuro custa caro.\n\nO que não é medido não melhora.\n\nQual indicador você acompanha toda semana?\n\n#gestao #indicadores #barbearia #gestaodebarbearia #empreendedorismo", "Atender, cobrar, comprar produto, responder no WhatsApp, postar no Instagram, resolver problema. Tudo com você?\n\nQuando tudo passa pelo dono, o negócio só cresce até onde ele aguenta.\n\nDelegar não é perder controle. É liberar o crescimento.\n\nO que você ainda faz sozinho e poderia delegar?\n\n#lideranca #delegar #barbearia #gestao #barbeiroempresario", "Comissão paga o trabalho. Meta mostra o caminho.\n\nBarbeiro com meta clara sabe onde precisa chegar, se desenvolve e cresce junto com a barbearia.\n\nSem direção, até o melhor profissional se acomoda.\n\nSua equipe tem metas definidas?\n\n#equipe #metas #gestaodepessoas #barbearia #lideranca", "Antes da tesoura encostar no cabelo, o cliente já decidiu se vai voltar.\n\nA luz, o cheiro, a música, a cadeira, a organização. O ambiente comunica o padrão da sua barbearia desde o primeiro passo.\n\nNa Hunker, cada detalhe foi pensado para isso.\n\nO que mais chama a sua atenção quando entra numa barbearia?\n\n#ambiente #experienciadocliente #barbearia #hunker #designdeinteriores", "Mentoria não é fórmula mágica. É aprender com quem já errou, corrigiu e sabe o caminho.\n\nCada erro que você evita é tempo e dinheiro economizados.\n\nAprender com a experiência de alguém é a forma mais inteligente de crescer.\n\nQuer saber mais sobre mentoria para donos de barbearia? Me chama no direct.\n\n#mentoria #barbeiroempresario #gestaodebarbearia #barbearia #empreendedorismo", "Nenhuma barbearia cresce nas costas de um barbeiro só.\n\nO que constrói um negócio forte é um time alinhado, que entende o propósito e entrega o mesmo padrão em cada atendimento.\n\nOrgulho da equipe Hunker.\n\nMarca alguém do seu time que veste a camisa.\n\n#equipe #hunker #barbearia #cultura #lideranca", "Disciplina não é motivação. É abrir no horário, cumprir o padrão, organizar o caixa e tratar bem cada cliente, todo dia.\n\nO resultado vem do básico bem feito, repetido muitas vezes.\n\nO extraordinário é o comum feito com constância.\n\nSalva para lembrar nos dias difíceis.\n\n#disciplina #mentalidade #barbearia #constancia #barbeiroempresario", "Agenda desorganizada gera atraso. Caixa sem controle gera prejuízo. Equipe sem direção gera retrabalho.\n\nEsses três pilares sustentam qualquer barbearia. Se um falha, os outros sentem.\n\nCuide dos três todos os dias.\n\nQual deles mais precisa de atenção na sua barbearia?\n\n#processos #gestaodebarbearia #barbearia #organizacao #empreendedorismo", "Decoração bonita chama atenção. Gestão bem feita mantém as portas abertas.\n\nJá vi barbearia linda fechar por falta de controle, e barbearia simples crescer por ter processo e números em dia.\n\nO bonito atrai. O bem administrado permanece.\n\nConcorda? Comenta aqui.\n\n#gestao #barbearia #posicionamento #barbeiroempresario #empreendedorismo", "Todo reajuste dá aquele frio na barriga. E se o cliente reclamar? E se ele for embora?\n\nMas trabalhar meses no prejuízo para não desagradar ninguém é muito pior. Quem entrega valor pode e deve cobrar o justo.\n\nReajuste com clareza e segurança.\n\nQuando foi a última vez que você reajustou seus preços?\n\n#precificacao #reajuste #barbearia #gestaodebarbearia #financas", "A sua barbearia cresce até onde a sua visão consegue enxergar.\n\nQuem pensa pequeno se contenta com pouco. Quem pensa como empresário planeja, investe e se prepara para crescer.\n\nAntes de mudar o negócio, mude a forma de pensar.\n\nO que você está fazendo hoje para expandir a sua visão?\n\n#mentalidade #barbeiroempresario #barbearia #crescimento #empreendedorismo", "Cliente satisfeito volta. Cliente encantado volta e ainda traz o amigo, o irmão e o colega de trabalho.\n\nA melhor propaganda da sua barbearia é a experiência que você entrega.\n\nEncante e o boca a boca faz o resto.\n\nMarca aqui alguém que você já indicou para a sua barbearia.\n\n#fidelizacao #indicacao #experienciadocliente #barbearia #hunker", "Curso, mentoria, livro, evento. Tudo isso parece gasto até você ver o retorno no seu negócio.\n\nConhecimento é o único investimento que ninguém tira de você e que rende para sempre.\n\nInvista em você antes de investir em qualquer outra coisa.\n\nQual foi o melhor investimento em conhecimento que você já fez?\n\n#conhecimento #aprendizado #barbeiroempresario #barbearia #mentoria", "Comecei na cadeira, com tesoura e máquina. Foi lá que aprendi tudo sobre o cliente.\n\nMas a cadeira foi só o começo. O destino é um negócio sólido, com equipe, processo e propósito.\n\nNunca esqueça de onde você veio, mas não pare por lá.\n\nOnde você quer que a sua barbearia esteja daqui a 5 anos?\n\n#visao #barbeiroempresario #hunker #barbearia #empreendedorismo"];
 const KEEP = [1,2,3,4,5,7,8,9,10,11,13,14,16,17,18,20,22,23,24,25,26,27,28,29];
 const VIS = n => KEEP.includes(n);
-const REELS = [{id:"reel_01", tag:"Preço x valor", src:"reels/reel_01.mp4?v=1", poster:"reels/reel_01.jpg?v=4", leg:"Antes de baixar o preço, olha o que você entrega.\n\nO cliente não compara só o número. Ele compara o que viveu dentro da barbearia com o que pagou. Quando sente que valeu a pena, ninguém reclama do preço. Quando não sente, até o corte barato parece caro.\n\nPreço é número. Valor é experiência. E o seu posicionamento depende do jogo que você quer jogar.\n\nQual jogo você está jogando na sua barbearia? Comenta aqui.\n\n#precificacao #posicionamento #barbearia #barbeiroempresario #gestaodebarbearia"}, {id:"reel_02", tag:"Talento x gestão", src:"reels/reel_02.mp4?v=2", poster:"reels/reel_02.jpg?v=2", hd:{name:"Reel 02 - Talento x Gestao (alta).mp4", parts:["reels/reel_02.mp4"]}, leg:"Seu talento pode estar te prendendo na cadeira.\n\nMão boa, olho bom e capricho trazem cliente. Mas se tudo depende de você cortar, você nunca tem tempo de olhar para o negócio.\n\nÉ a gestão que te libera: agenda organizada, caixa controlado e time treinado. Aí você começa a trabalhar no negócio, e não só dentro dele.\n\nTalento te coloca na cadeira. Gestão te tira dela.\n\nHoje você trabalha no negócio ou dentro dele? Comenta aqui.\n\n#gestaodebarbearia #barbeiroempresario #barbearia #empreendedorismo #hunker"}];
+const REELS = [{id:"reel_01", tag:"Preço x valor", pub:true, src:"reels/reel_01.mp4?v=1", poster:"reels/reel_01.jpg?v=4", leg:"Antes de baixar o preço, olha o que você entrega.\n\nO cliente não compara só o número. Ele compara o que viveu dentro da barbearia com o que pagou. Quando sente que valeu a pena, ninguém reclama do preço. Quando não sente, até o corte barato parece caro.\n\nPreço é número. Valor é experiência. E o seu posicionamento depende do jogo que você quer jogar.\n\nQual jogo você está jogando na sua barbearia? Comenta aqui.\n\n#precificacao #posicionamento #barbearia #barbeiroempresario #gestaodebarbearia"}, {id:"reel_02", tag:"Talento x gestão", src:"reels/reel_02.mp4?v=2", poster:"reels/reel_02.jpg?v=2", hd:{name:"Reel 02 - Talento x Gestao (alta).mp4", parts:["reels/reel_02.mp4"]}, leg:"Seu talento pode estar te prendendo na cadeira.\n\nMão boa, olho bom e capricho trazem cliente. Mas se tudo depende de você cortar, você nunca tem tempo de olhar para o negócio.\n\nÉ a gestão que te libera: agenda organizada, caixa controlado e time treinado. Aí você começa a trabalhar no negócio, e não só dentro dele.\n\nTalento te coloca na cadeira. Gestão te tira dela.\n\nHoje você trabalha no negócio ou dentro dele? Comenta aqui.\n\n#gestaodebarbearia #barbeiroempresario #barbearia #empreendedorismo #hunker"}];
 const TOTAL = KEEP.length + REELS.length;
 const pad = n => String(n).padStart(2,'0');
 const state = {}; // id -> {status, comentario, at}
@@ -266,7 +295,7 @@ let filter = 'todos', db = null, col = null;
 const grid = document.getElementById('grid');
 const note = document.getElementById('note');
 
-function statusOf(id){ return state[id]?.status || 'pendente'; }
+function statusOf(id){ if(REELS.some(r=>r.id===id&&r.pub)) return 'aprovado'; return state[id]?.status || 'pendente'; }
 function fmt(at){ try{ return new Date(at).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});}catch(e){return ''} }
 
 const HD='Posts%20aprovados%20%40omichelmueller%20-%20feed%204x5%20alta/';
@@ -428,10 +457,23 @@ lb.addEventListener('click',e=>{ if(e.target===lb) closeLb(); });
 lb.addEventListener('keydown',e=>{ if(e.key==='Escape')closeLb(); if(e.key==='ArrowRight')step(1); if(e.key==='ArrowLeft')step(-1); });
 
 
+function isPosted(id){ return REELS.some(r=>r.id===id&&r.pub) || !!(state[id]&&state[id].postado); }
+document.addEventListener('click',e=>{ const b=e.target.closest('[data-post]'); if(!b) return; const id=b.dataset.post; if(REELS.some(r=>r.id===id&&r.pub)) return;
+  const d=state[id]||{}; if(d.postado){ delete d.postado; delete d.postadoEm; } else { d.postado=true; d.postadoEm=new Date().toISOString(); if(!d.status||d.status==='pendente') d.status='aprovado'; }
+  state[id]=d; persist(); render(); });
 function placeCards(){
   const ag=document.getElementById('aprovGrid'), ar=document.getElementById('aprovReels'); let n=0;
-  KEEP.forEach(k=>{ const id='post_'+pad(k), c=cards[id]; if(!c) return; const ap=statusOf(id)==='aprovado'&&!editing.has(id); const t=ap?ag:grid; if(c.parentNode!==t||ap) t.appendChild(c); if(ap&&!c.hidden) n++; });
-  REELS.forEach(r=>{ const c=reelCards[r.id]; if(!c) return; const ap=statusOf(r.id)==='aprovado'&&!editing.has(r.id); const t=ap?ar:reelBox; if(c.parentNode!==t||ap) t.appendChild(c); if(ap&&!c.hidden) n++; });
+  let np=0; const pr=document.getElementById('pubReels'), pg=document.getElementById('pubGrid');
+  const all=KEEP.map(k=>['post_'+pad(k),cards['post_'+pad(k)],grid,ag,pg]).concat(REELS.map(r=>[r.id,reelCards[r.id],reelBox,ar,pr]));
+  all.forEach(([id,c,home,apr,pub])=>{ if(!c) return; const posted=isPosted(id);
+    let b=c.querySelector('.postbtn'); if(!b){ b=document.createElement('button'); b.type='button'; b.className='postbtn'; b.dataset.post=id; c.querySelector('.meta').appendChild(b); }
+    b.classList.toggle('on',posted); b.innerHTML=posted?(REELS.some(r=>r.id===id&&r.pub)?'✓ Postado':'✓ Postado · desmarcar'):'Marcar como postado';
+    let st=c.querySelector('.stamp'); if(posted&&!st){ st=document.createElement('div'); st.className='stamp'; c.appendChild(st); } if(!posted&&st){ st.remove(); st=null; }
+    if(st){ const at=(state[id]||{}).postadoEm; st.innerHTML='Postado'+(at?'<small>'+new Date(at).toLocaleDateString('pt-BR')+'</small>':''); }
+    c.classList.toggle('is-posted',posted);
+    if(posted){ c.hidden=false; if(c.parentNode!==pub) pub.appendChild(c); np++; return; }
+    const ap=statusOf(id)==='aprovado'&&!editing.has(id); const t=ap?apr:home; if(c.parentNode!==t||ap) t.appendChild(c); if(ap&&!c.hidden) n++; });
+  document.getElementById('pubSec').hidden=!np;
   document.getElementById('aprovSec').hidden=!n;
   const pend=[...grid.querySelectorAll('.card')].some(c=>!c.hidden); const em=grid.querySelector('.empty'); if(em) em.hidden=pend; 
   document.getElementById('reelsH').hidden=![...reelBox.querySelectorAll('.card')].some(c=>!c.hidden);
@@ -439,20 +481,32 @@ function placeCards(){
 (function portal(){
   const ini=new Date('2026-11-01T00:00:00-03:00').getTime(), fim=new Date('2027-02-01T00:00:00-03:00').getTime();
   const z=n=>String(n).padStart(2,'0');
+  // status das parcelas: 'pago' | 'atraso' (datas AAAA-MM-DD)
+  const PAGOS={'2026-11-01':'pago'};
   function tick(){ const now=Date.now(); let r=Math.max(0,fim-now);
     const d=Math.floor(r/864e5); r-=d*864e5; const h=Math.floor(r/36e5); r-=h*36e5; const m=Math.floor(r/6e4); const s=Math.floor((r-m*6e4)/1e3);
-    document.getElementById('cdD').textContent=d; document.getElementById('cdH').textContent=z(h); document.getElementById('cdM').textContent=z(m); document.getElementById('cdS').textContent=z(s);
-    const p=Math.min(100,Math.max(0,(now-ini)/(fim-ini)*100)); document.getElementById('cdBar').style.width=p+'%';
-    document.getElementById('cdTxt').textContent= now>=fim ? 'Vigência inicial concluída. A continuidade segue pelo aditivo do contrato.' : (now<ini ? 'O contrato começa em 01/11/2026.' : Math.round(p)+'% da vigência inicial concluída');
+    cdD.textContent=d; cdH.textContent=z(h); cdM.textContent=z(m); cdS.textContent=z(s);
+    const p=Math.min(100,Math.max(0,(now-ini)/(fim-ini)*100)); cdBar.style.width=p+'%';
+    cdTxt.innerHTML= now>=fim ? '<b>Concluída</b>' : '<b>'+Math.round(p)+'%</b> concluído';
+    if(now>=fim){ ctrChip.className='chip soon'; ctrChip.innerHTML='<i></i>Renovação'; }
   }
-  function due(){ const t=new Date(); const today=new Date(t.getFullYear(),t.getMonth(),t.getDate());
-    let next; if(today.getDate()<=1) next=new Date(t.getFullYear(),t.getMonth(),1); else if(today.getDate()<=15) next=new Date(t.getFullYear(),t.getMonth(),15); else next=new Date(t.getFullYear(),t.getMonth()+1,1);
-    const dias=Math.round((next-today)/864e5); const f=next.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});
-    document.getElementById('due1').classList.toggle('next',next.getDate()===1); document.getElementById('due15').classList.toggle('next',next.getDate()===15);
-    document.getElementById('dueTxt').innerHTML='Próximo vencimento: <b>'+f+'</b> · <b>R$ 1.250,00</b> · '+(dias===0?'<b>vence hoje</b>':dias===1?'falta 1 dia':'faltam '+dias+' dias');
+  function pays(){ const today=new Date(); today.setHours(0,0,0,0);
+    const list=[]; for(let mo=0;mo<3;mo++){ for(const dd of [1,15]){ list.push(new Date(2026,10+mo,dd)); } }
+    const iso=d=>d.getFullYear()+'-'+z(d.getMonth()+1)+'-'+z(d.getDate());
+    const fmt=d=>d.toLocaleDateString('pt-BR',{day:'2-digit',month:'short'}).replace('.','');
+    let late=[], html='', nextShown=0;
+    list.forEach((d,i)=>{ const k=iso(d), paid=PAGOS[k]==='pago', isLate=!paid && d<today; const dias=Math.round((today-d)/864e5);
+      if(isLate) late.push({d,dias,n:i%2+1});
+      if(!paid && !isLate && nextShown>=2) return; if(!paid && !isLate) nextShown++;
+      const chip= paid? '<span class="chip paid"><i></i>Pago</span>' : isLate? '<span class="chip late"><i></i>Em atraso · '+dias+(dias===1?' dia':' dias')+'</span>' : '<span class="chip soon"><i></i>'+(Math.round((d-today)/864e5)===0?'Vence hoje':'Em '+Math.round((d-today)/864e5)+' dias')+'</span>';
+      html+='<li><span class="d">'+fmt(d)+'<small>'+(i%2?'2ª parcela':'1ª parcela · antecipada')+'</small></span><span class="v">R$ 1.250,00</span>'+chip+'</li>'; });
+    inst.innerHTML=html;
+    if(late.length){ payAlert.hidden=false; const l=late[0]; payAlertTxt.innerHTML='<b>'+(l.n===2?'2ª':'1ª')+' parcela de '+l.d.toLocaleDateString('pt-BR',{month:'long'})+' em atraso</b> há '+l.dias+(l.dias===1?' dia':' dias')+'. Vencimento em '+l.d.toLocaleDateString('pt-BR')+' · R$ 1.250,00 via Pix.';
+      payChip.className='chip late'; payChip.innerHTML='<i></i>Pendente'; }
+    else { payAlert.hidden=true; payChip.className='chip paid'; payChip.innerHTML='<i></i>Em dia'; }
   }
-  tick(); due(); setInterval(tick,1000); setInterval(due,6e4);
-  document.getElementById('pixCopy').onclick=e=>{ const k=document.getElementById('pixKey').textContent; const done=()=>{ e.target.textContent='Copiada ✓'; setTimeout(()=>e.target.textContent='Copiar chave',2000); }; if(navigator.clipboard) navigator.clipboard.writeText(k).then(done,done); else done(); };
+  tick(); pays(); setInterval(tick,1000); setInterval(pays,6e4);
+  pixCopy.onclick=e=>{ const k=pixKey.textContent; const done=()=>{ e.target.textContent='Copiada ✓'; setTimeout(()=>e.target.textContent='Copiar chave',2000); }; if(navigator.clipboard) navigator.clipboard.writeText(k).then(done,done); else done(); };
 })();
 render();
 
