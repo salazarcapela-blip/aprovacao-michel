@@ -194,6 +194,11 @@ button:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid va
 .ico{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;text-decoration:none}
 .ico svg{width:18px;height:18px}.ico.wa{background:#25d366;color:#06130b}.ico.ig{background:linear-gradient(135deg,#f58529,#dd2a7b 50%,#8134af);color:#fff}
 .portal{display:block}
+.lateBar{align-items:center;margin:4px 0 22px;padding:14px 14px 14px 16px;font-size:14px;background:linear-gradient(90deg,rgba(255,80,60,.2),rgba(120,20,15,.15));border-color:rgba(255,99,82,.55);animation:redglow 2.4s ease-in-out infinite}
+.lateBar>span{flex:1}
+.pixBtn{flex:none;display:inline-flex;align-items:center;gap:7px;border:0;border-radius:12px;padding:10px 14px;font:800 13px var(--body);color:#16120b;background:linear-gradient(135deg,#f3d9a4,#c9a25b);cursor:pointer;white-space:nowrap}
+.pixBtn svg{width:15px;height:15px;color:#16120b;margin:0}
+@media(max-width:600px){.lateBar{flex-wrap:wrap}.pixBtn{width:100%;justify-content:center}}
 .pc.pay.late{background:linear-gradient(160deg,rgba(255,80,60,.22),rgba(120,20,15,.18) 60%);border-color:rgba(255,99,82,.55);box-shadow:0 0 0 1px rgba(255,99,82,.25),0 20px 50px -20px rgba(255,60,40,.45);animation:redglow 2.4s ease-in-out infinite}
 .pc.pay.late::before{background:radial-gradient(circle,rgba(255,99,82,.25),transparent 65%)}
 @keyframes redglow{0%,100%{box-shadow:0 0 0 1px rgba(255,99,82,.25),0 20px 50px -20px rgba(255,60,40,.35)}50%{box-shadow:0 0 0 1px rgba(255,99,82,.45),0 20px 60px -16px rgba(255,60,40,.6)}}
@@ -240,13 +245,8 @@ button:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid va
     </div>
   </header>
 
-  <section class="portal" id="portal" aria-label="Pagamento" hidden>
-    <div class="pc pay late">
-      <div class="ph"><h3>Pagamento</h3><span class="chip late"><i></i>Pendente</span></div>
-      <div class="alert"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg><span class="payAlertTxt"></span></div>
-      <ul class="inst instList"></ul>
-      <div class="pix"><span>PIX</span><b>94992405524</b><button type="button" class="pixCopy">Copiar chave</button></div>
-    </div>
+  <section class="portal" id="portal" aria-label="Pagamento em atraso" hidden>
+    <div class="alert lateBar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg><span class="payAlertTxt"></span><button type="button" class="pixCopy pixBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span>Copiar Pix</span></button></div>
   </section>
 
   <div class="bar" role="region" aria-label="Progresso">
@@ -555,7 +555,7 @@ function placeCards(){
   }
   document.addEventListener('click',e=>{
     const pb=e.target.closest('[data-pay]'); if(pb){ const k=pb.dataset.pay; if(LOCAL[k]) delete LOCAL[k]; else LOCAL[k]=true; try{ localStorage.setItem('aprov-pagos',JSON.stringify(LOCAL)); }catch(err){} pays(); return; }
-    const pc=e.target.closest('.pixCopy'); if(pc){ const k='94992405524'; const done=()=>{ pc.textContent='Copiada ✓'; setTimeout(()=>pc.textContent='Copiar chave',2000); }; if(navigator.clipboard) navigator.clipboard.writeText(k).then(done,done); else done(); return; }
+    const pc=e.target.closest('.pixCopy'); if(pc){ const k='94992405524'; const t=pc.querySelector('span')||pc, orig=t.textContent; const done=()=>{ t.textContent='Pix copiado ✓'; setTimeout(()=>t.textContent=orig,2000); }; if(navigator.clipboard) navigator.clipboard.writeText(k).then(done,done); else done(); return; }
   });
   const cm=$('ctrModal'); let lastF=null;
   $('openCtr').onclick=()=>{ lastF=document.activeElement; cm.classList.add('open'); document.body.style.overflow='hidden'; setTimeout(()=>$('closeCtr').focus(),50); };
